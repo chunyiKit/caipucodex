@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.venv/
+backend/.venv/
+backend/caipucodex.db
+backend/tests/test.db
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+coverage/
+
+# Env
+.env
+backend/.env
+frontend/.env
+
+# Uploads generated at runtime
+backend/uploads/recipes/*.png
+backend/uploads/recipes/*.jpg
+backend/uploads/recipes/*.jpeg
+backend/uploads/recipes/*.webp
+
+# OS
+.DS_Store

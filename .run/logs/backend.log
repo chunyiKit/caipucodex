@@ -1,0 +1,180 @@
+INFO:     Started server process [321]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started server process [6699]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:53015 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53020 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53019 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53018 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53021 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53022 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53020 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53016 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53016 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53021 - "GET /uploads/recipes/seed_%E5%8F%AF%E4%B9%90%E9%B8%A1%E7%BF%85.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53022 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53018 - "GET /uploads/recipes/seed_%E9%B1%BC%E9%A6%99%E8%8C%84%E5%AD%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53045 - "GET /uploads/recipes/seed_%E8%9B%8B%E7%82%92%E9%A5%AD.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53019 - "GET /uploads/recipes/seed_%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53020 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53021 - "GET /uploads/recipes/seed_%E7%99%BD%E7%81%BC%E8%99%BE.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53018 - "GET /uploads/recipes/seed_%E9%93%B6%E8%80%B3%E9%9B%AA%E6%A2%A8%E7%BE%B9.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53022 - "GET /uploads/recipes/seed_%E9%A6%99%E7%85%8E%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53016 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53016 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53016 - "GET /api/recipes/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53016 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53016 - "GET /api/menus/4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53016 - "GET /api/menus/4/ingredients HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53184 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53185 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53190 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53187 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53186 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53188 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53189 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53191 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53185 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53191 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53188 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53189 - "GET /uploads/recipes/seed_%E5%8F%AF%E4%B9%90%E9%B8%A1%E7%BF%85.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53187 - "GET /uploads/recipes/seed_%E8%9B%8B%E7%82%92%E9%A5%AD.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53186 - "GET /uploads/recipes/seed_%E9%B1%BC%E9%A6%99%E8%8C%84%E5%AD%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53190 - "GET /uploads/recipes/seed_%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53188 - "GET /uploads/recipes/seed_%E9%A6%99%E7%85%8E%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53186 - "GET /uploads/recipes/seed_%E9%93%B6%E8%80%B3%E9%9B%AA%E6%A2%A8%E7%BE%B9.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53191 - "GET /uploads/recipes/seed_%E7%99%BD%E7%81%BC%E8%99%BE.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53185 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53185 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53185 - "GET /api/recipes/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53185 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53185 - "GET /api/menus/4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53185 - "GET /api/menus/4/ingredients HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53365 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53366 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53370 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53371 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53369 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53367 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53368 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53372 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53370 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53367 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53366 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53369 - "GET /uploads/recipes/seed_%E9%A6%99%E7%85%8E%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53371 - "GET /uploads/recipes/seed_%E7%99%BD%E7%81%BC%E8%99%BE.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53372 - "GET /uploads/recipes/seed_%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53370 - "GET /uploads/recipes/seed_%E9%B1%BC%E9%A6%99%E8%8C%84%E5%AD%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53367 - "GET /uploads/recipes/seed_%E5%8F%AF%E4%B9%90%E9%B8%A1%E7%BF%85.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53368 - "GET /uploads/recipes/seed_%E8%9B%8B%E7%82%92%E9%A5%AD.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53369 - "GET /uploads/recipes/seed_%E9%93%B6%E8%80%B3%E9%9B%AA%E6%A2%A8%E7%BE%B9.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53366 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53366 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53366 - "GET /api/recipes/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53366 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53366 - "GET /api/menus/4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53366 - "GET /api/menus/4/ingredients HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61771 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61772 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61774 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61777 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61778 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61776 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61773 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61775 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61778 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61774 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6699]
+INFO:     Started server process [45725]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:65200 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65201 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52150 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52151 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52178 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52179 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52180 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52177 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52182 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52181 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52179 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52178 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54031 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54032 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55724 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55725 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55727 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55728 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55730 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55726 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55731 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55729 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55727 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55730 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61367 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61368 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61368 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61367 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61367 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61368 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54539 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54540 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54543 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54545 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54544 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54542 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54546 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54547 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54544 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54545 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54941 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54942 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54944 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54943 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54945 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54946 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54948 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54947 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54948 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54944 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54960 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54961 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54967 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54964 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54963 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54962 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54966 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54965 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54967 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54966 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57586 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57587 - "GET /uploads/recipes/seed_%E5%8F%AF%E4%B9%90%E9%B8%A1%E7%BF%85.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57588 - "GET /uploads/recipes/seed_%E9%B1%BC%E9%A6%99%E8%8C%84%E5%AD%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57589 - "GET /uploads/recipes/seed_%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57591 - "GET /uploads/recipes/seed_%E9%A6%99%E7%85%8E%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57590 - "GET /uploads/recipes/seed_%E8%9B%8B%E7%82%92%E9%A5%AD.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57592 - "GET /uploads/recipes/seed_%E7%99%BD%E7%81%BC%E8%99%BE.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57588 - "GET /uploads/recipes/seed_%E9%93%B6%E8%80%B3%E9%9B%AA%E6%A2%A8%E7%BE%B9.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57717 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58122 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58213 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58540 - "OPTIONS /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58540 - "POST /api/menus HTTP/1.1" 201 Created
+INFO:     127.0.0.1:58540 - "GET /api/menus/5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58707 - "GET /api/menus/5/ingredients HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59054 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59054 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59095 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59054 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59218 - "GET /api/menus/5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59218 - "GET /api/menus/5/ingredients HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59500 - "GET /api/menus HTTP/1.1" 200 OK
