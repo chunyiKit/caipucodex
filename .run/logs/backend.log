@@ -178,3 +178,115 @@ INFO:     127.0.0.1:59054 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1
 INFO:     127.0.0.1:59218 - "GET /api/menus/5 HTTP/1.1" 200 OK
 INFO:     127.0.0.1:59218 - "GET /api/menus/5/ingredients HTTP/1.1" 200 OK
 INFO:     127.0.0.1:59500 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     Started server process [98439]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [98439]
+INFO:     Started server process [99229]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [99229]
+INFO:     Started server process [1548]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55721 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55722 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55921 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55923 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1548]
+INFO:     Started server process [6158]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57202 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57202 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57203 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57445 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58612 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58614 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59575 - "GET / HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [6158]
+INFO:     Started server process [7260]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60142 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60144 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7260]
+INFO:     Started server process [21396]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57718 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58285 - "POST /api/recipes HTTP/1.1" 201 Created
+INFO:     127.0.0.1:63980 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49448 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49466 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49472 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49469 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49470 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49468 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49471 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49473 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49475 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49482 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49483 - "GET /uploads/recipes/seed_%E9%B1%BC%E9%A6%99%E8%8C%84%E5%AD%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49484 - "GET /uploads/recipes/seed_%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49485 - "GET /uploads/recipes/seed_%E8%9B%8B%E7%82%92%E9%A5%AD.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49486 - "GET /uploads/recipes/seed_%E9%A6%99%E7%85%8E%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49487 - "GET /uploads/recipes/seed_%E7%99%BD%E7%81%BC%E8%99%BE.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49490 - "GET /uploads/recipes/seed_%E9%93%B6%E8%80%B3%E9%9B%AA%E6%A2%A8%E7%BE%B9.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49491 - "GET /uploads/recipes/seed_%E5%8F%AF%E4%B9%90%E9%B8%A1%E7%BF%85.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49493 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51284 - "POST /api/recipes HTTP/1.1" 201 Created
+INFO:     127.0.0.1:51288 - "GET /api/recipes/18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52734 - "GET /api/menus HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52735 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52744 - "GET /uploads/recipes/seed_%E9%BA%BB%E5%A9%86%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52743 - "GET /uploads/recipes/seed_%E6%B8%85%E7%82%92%E6%97%B6%E8%94%AC.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52741 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52745 - "GET /uploads/recipes/seed_%E7%B3%96%E9%86%8B%E9%87%8C%E8%84%8A.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52742 - "GET /uploads/recipes/seed_%E5%86%AC%E7%93%9C%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52746 - "GET /uploads/recipes/seed_%E5%87%89%E6%8B%8C%E9%BB%84%E7%93%9C.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53144 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53208 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53265 - "GET /api/menus/4 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53267 - "GET /uploads/recipes/seed_%E7%BA%A2%E7%83%A7%E6%8E%92%E9%AA%A8.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53365 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53368 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53374 - "GET /uploads/recipes/seed_%E7%8E%89%E7%B1%B3%E6%8E%92%E9%AA%A8%E6%B1%A4.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53373 - "GET /uploads/recipes/seed_%E5%8F%AF%E4%B9%90%E9%B8%A1%E7%BF%85.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53375 - "GET /uploads/recipes/seed_%E8%9B%8B%E7%82%92%E9%A5%AD.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53377 - "GET /uploads/recipes/seed_%E7%99%BD%E7%81%BC%E8%99%BE.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53376 - "GET /uploads/recipes/seed_%E9%A6%99%E7%85%8E%E8%B1%86%E8%85%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53379 - "GET /uploads/recipes/seed_%E9%93%B6%E8%80%B3%E9%9B%AA%E6%A2%A8%E7%BE%B9.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53383 - "GET /uploads/recipes/seed_%E9%B1%BC%E9%A6%99%E8%8C%84%E5%AD%90.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53384 - "GET /uploads/recipes/seed_%E8%92%9C%E8%93%89%E8%A5%BF%E5%85%B0%E8%8A%B1.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53385 - "GET /uploads/recipes/seed_%E7%95%AA%E8%8C%84%E7%82%92%E8%9B%8B.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53589 - "GET /api/recipes?category=%E5%85%A8%E9%83%A8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53590 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53631 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53992 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54097 - "GET /api/recipes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54233 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54287 - "GET /uploads/recipes/1773310818_6a9dcc6c9758.jpg HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54334 - "POST /api/menus HTTP/1.1" 201 Created
+INFO:     127.0.0.1:54336 - "GET /api/menus/6 HTTP/1.1" 200 OK

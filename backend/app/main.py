@@ -15,6 +15,16 @@ from app.routers.recipes import router as recipes_router
 settings = get_settings()
 app = FastAPI(title=settings.app_name)
 
+
+@app.get("/")
+def root() -> dict[str, str]:
+    return {
+        "name": settings.app_name,
+        "status": "ok",
+        "health": "/health",
+        "docs": "/docs",
+    }
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.frontend_origin, "http://127.0.0.1:5173"],

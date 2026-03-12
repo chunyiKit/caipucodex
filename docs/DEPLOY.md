@@ -11,7 +11,7 @@
 - 前端：Vite 构建后的静态文件
 - 后端：FastAPI + Uvicorn，由 systemd 托管
 - 数据库：PostgreSQL 15+
-- HTTPS：Let's Encrypt + Certbot
+- 访问方式：直接通过服务器公网 IP 的 `80` 端口访问
 
 推荐资源：
 
@@ -26,15 +26,14 @@
 
 - 购买一台 Ubuntu 22.04 LTS 云服务器
 - 绑定公网 IP
-- 解析域名到服务器 IP，例如 `caipu.example.com`
-- 放通安全组端口：`22`、`80`、`443`
+- 记录服务器公网 IP，例如 `1.2.3.4`
+- 放通安全组端口：`22`、`80`
 
 如果服务器启用了 UFW，可执行：
 
 ```bash
 sudo ufw allow 22
 sudo ufw allow 80
-sudo ufw allow 443
 sudo ufw reload
 ```
 
@@ -43,7 +42,7 @@ sudo ufw reload
 ```bash
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y git curl wget unzip tar build-essential software-properties-common ca-certificates gnupg lsb-release nginx certbot python3-certbot-nginx
+sudo apt install -y git curl wget unzip tar build-essential software-properties-common ca-certificates gnupg lsb-release nginx
 ```
 
 ## 二、项目目录规划
@@ -160,13 +159,13 @@ cp .env.example .env
 生产环境建议修改为：
 
 ```env
-VITE_API_BASE_URL=https://caipu.example.com
+VITE_API_BASE_URL=
 
 APP_NAME=CaipuCodex API
 APP_ENV=production
 APP_HOST=127.0.0.1
 APP_PORT=8000
-FRONTEND_ORIGIN=https://caipu.example.com
+FRONTEND_ORIGIN=http://1.2.3.4
 DATABASE_URL=postgresql+psycopg://caipu:强密码@127.0.0.1:5432/caipucodex
 OPENAI_API_KEY=你的APIKey
 OPENAI_BASE_URL=
@@ -176,9 +175,10 @@ OPENAI_TIMEOUT_SECONDS=30
 
 注意：
 
-- `VITE_API_BASE_URL` 建议直接写线上域名，避免浏览器跨域问题
+- `VITE_API_BASE_URL` 这里留空，前端会直接使用同源的 `/api` 和 `/uploads`
 - `APP_HOST` 建议为 `127.0.0.1`，由 Nginx 反向代理暴露
-- `FRONTEND_ORIGIN` 必须改成你的正式域名
+- `FRONTEND_ORIGIN` 必须改成你的公网 IP，例如 `http://1.2.3.4`
+- 后端 `8000` 端口无需对公网开放，只需允许本机 `127.0.0.1` 访问
 - `.env` 不要提交到 Git
 
 ## 五、安装依赖与初始化
@@ -212,7 +212,7 @@ npm run build
 ```bash
 cd /srv/caipucodex/backend
 source .venv/bin/activate
-PYTHONPATH=. .venv/bin/alembic upgrade head
+PYTHONPATH=. python -m alembic upgrade head
 ```
 
 如果你的 PostgreSQL 已经存在表结构，但缺少 Alembic 版本记录，可执行：
@@ -220,7 +220,7 @@ PYTHONPATH=. .venv/bin/alembic upgrade head
 ```bash
 cd /srv/caipucodex/backend
 source .venv/bin/activate
-PYTHONPATH=. .venv/bin/alembic stamp head
+PYTHONPATH=. python -m alembic stamp head
 ```
 
 ### 4. 初始化示例数据（可选）
@@ -293,7 +293,7 @@ curl http://127.0.0.1:8000/health
 sudo tee /etc/nginx/sites-available/caipucodex >/dev/null <<'NGINX'
 server {
     listen 80;
-    server_name caipu.example.com;
+    server_name _;
 
     root /srv/caipucodex/frontend/dist;
     index index.html;
@@ -322,6 +322,12 @@ server {
 NGINX
 ```
 
+说明：
+
+- `server_name _;` 表示该站点直接响应服务器公网 IP 的访问请求
+- 浏览器访问地址为 `http://你的公网IP`
+- 后端服务继续只监听 `127.0.0.1:8000`，由 Nginx 转发 `/api` 和 `/uploads`
+
 启用站点：
 
 ```bash
@@ -346,13 +352,21 @@ sudo systemctl reload nginx
 cd /srv/caipucodex/frontend
 npm ci
 npm run build
+sudo systemctl reload nginx
 ```
 
 Nginx 直接读取 `frontend/dist`，不需要额外前端进程。
 
 ## 八、HTTPS
 
-域名解析完成后执行：
+当前文档使用的是公网 IP 直接访问，因此这一章可以跳过。
+
+说明：
+
+- Let's Encrypt 一般不能直接给裸公网 IP 签发证书
+- 如果后续你绑定了正式域名，再安装 `certbot` 和 `python3-certbot-nginx`，并按下面方式启用 HTTPS
+
+当你已经把域名解析到服务器后，可执行：
 
 ```bash
 sudo certbot --nginx -d caipu.example.com
@@ -396,6 +410,7 @@ chmod -R 755 /srv/caipucodex/backend/uploads
 ```bash
 curl http://127.0.0.1:8000/health
 curl http://127.0.0.1:8000/api/categories
+curl http://127.0.0.1
 ```
 
 再检查服务状态：
@@ -408,7 +423,7 @@ sudo systemctl status postgresql
 
 浏览器检查：
 
-- 首页是否可访问
+- `http://你的公网IP` 首页是否可访问
 - 菜谱列表是否有数据
 - 新建菜谱是否能上传图片
 - 点菜 -> 生成菜单 -> 保存菜单链路是否正常
@@ -418,6 +433,7 @@ sudo systemctl status postgresql
 重点检查：
 
 - Nginx 站点是否正确回退到 `index.html`
+- `/api` 和 `/uploads` 是否已正确反向代理到后端
 - `/api/` 是否正常反向代理
 - `/uploads/` 图片是否能直接访问
 - PostgreSQL 连接是否正常

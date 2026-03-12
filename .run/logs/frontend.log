@@ -27,3 +27,85 @@
 8:24:59 PM [vite] (client) hmr update /src/styles/index.css
 8:35:01 PM [vite] (client) hmr update /src/pages/HomePage.tsx
 8:35:01 PM [vite] (client) hmr update /src/styles/index.css
+
+> caipucodex-frontend@0.1.0 dev
+> vite --host 127.0.0.1 --port 5173 --strictPort
+
+node:internal/modules/esm/resolve:274
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/chunyi/Documents/caipucodex/frontend/node_modules/dist/node/cli.js' imported from /Users/chunyi/Documents/caipucodex/frontend/node_modules/.bin/vite
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:737:20)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:714:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:293:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:350:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:664:21)
+    at defaultImportModuleDynamicallyForModule (node:internal/modules/esm/utils:224:31) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/chunyi/Documents/caipucodex/frontend/node_modules/dist/node/cli.js'
+}
+
+Node.js v24.11.1
+
+> caipucodex-frontend@0.1.0 dev
+> vite --host 127.0.0.1 --port 5173 --strictPort
+
+node:internal/modules/esm/resolve:274
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/Users/chunyi/Documents/caipucodex/frontend/node_modules/dist/node/cli.js' imported from /Users/chunyi/Documents/caipucodex/frontend/node_modules/.bin/vite
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:864:10)
+    at defaultResolve (node:internal/modules/esm/resolve:990:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:737:20)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:714:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:293:38)
+    at onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:36)
+    at TracingChannel.tracePromise (node:diagnostics_channel:350:14)
+    at ModuleLoader.import (node:internal/modules/esm/loader:664:21)
+    at defaultImportModuleDynamicallyForModule (node:internal/modules/esm/utils:224:31) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///Users/chunyi/Documents/caipucodex/frontend/node_modules/dist/node/cli.js'
+}
+
+Node.js v24.11.1
+
+> caipucodex-frontend@0.1.0 dev
+> node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173 --strictPort
+
+
+  VITE v6.4.1  ready in 139 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+7:32:57 PM [vite] (client) hmr update /src/components/BottomSheet.tsx?t=1, /src/components/BottomSheet.tsx
+7:32:57 PM [vite] (client) hmr update /src/components/ActionSheet.tsx
+
+> caipucodex-frontend@0.1.0 dev
+> node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173 --strictPort
+
+
+  VITE v6.4.1  ready in 145 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+
+> caipucodex-frontend@0.1.0 dev
+> node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173 --strictPort
+
+
+  VITE v6.4.1  ready in 153 ms
+
+  ➜  Local:   http://127.0.0.1:5173/
+
+> caipucodex-frontend@0.1.0 dev
+> node ./node_modules/vite/bin/vite.js --config vite.config.ts --host 127.0.0.1 --port 5173 --strictPort
+
+
+  VITE v6.4.1  ready in 130 ms
+
+  ➜  Local:   http://127.0.0.1:5173/

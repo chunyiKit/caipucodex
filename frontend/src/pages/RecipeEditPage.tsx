@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
+import { assetUrl } from '@/api/client';
 import { createRecipe, getRecipe, updateRecipe, uploadRecipeImage } from '@/api/recipes';
 import { ActionSheet } from '@/components/ActionSheet';
 import { Screen } from '@/components/Screen';
@@ -126,7 +127,7 @@ export function RecipeEditPage() {
           <div className="form-card">
             <label className="field-label">封面图</label>
             <label className="upload-box">
-              {form.image_url ? <img src={form.image_url.startsWith('/uploads') ? `${import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:8000'}${form.image_url}` : form.image_url} alt="封面" /> : <span>{uploading ? '上传中...' : '点击上传封面'}</span>}
+              {form.image_url ? <img src={assetUrl(form.image_url)} alt="封面" /> : <span>{uploading ? '上传中...' : '点击上传封面'}</span>}
               <input
                 type="file"
                 accept="image/*"

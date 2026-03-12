@@ -1,9 +1,11 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
-const frontendDir = '/Users/chunyi/Documents/Playground/frontend';
-const rootDir = '/Users/chunyi/Documents/Playground';
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const frontendDir = path.resolve(scriptDir, '..');
+const rootDir = path.resolve(frontendDir, '..');
 const outputRoot = path.join(rootDir, '.artifacts', 'screenshots');
 const baseUrl = 'http://127.0.0.1:5173';
 const viewports = [

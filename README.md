@@ -12,10 +12,10 @@
 
 ## 项目结构
 
-- `/Users/chunyi/Documents/Playground/frontend` React + TypeScript + Vite 前端
-- `/Users/chunyi/Documents/Playground/backend` FastAPI + SQLAlchemy + PostgreSQL/SQLite 后端
-- `/Users/chunyi/Documents/Playground/docs/DEPLOY.md` 部署文档
-- `/Users/chunyi/Documents/Playground/docs/UPGRADE.md` 升级文档
+- `/Users/chunyi/Documents/caipucodex/frontend` React + TypeScript + Vite 前端
+- `/Users/chunyi/Documents/caipucodex/backend` FastAPI + SQLAlchemy + PostgreSQL/SQLite 后端
+- `/Users/chunyi/Documents/caipucodex/docs/DEPLOY.md` 部署文档
+- `/Users/chunyi/Documents/caipucodex/docs/UPGRADE.md` 升级文档
 
 ## 环境要求
 
@@ -25,25 +25,25 @@
 
 ## 快速开始
 
-1. 复制环境变量：`cp /Users/chunyi/Documents/Playground/.env.example /Users/chunyi/Documents/Playground/.env`
-2. 安装后端依赖：`pip install -r /Users/chunyi/Documents/Playground/backend/requirements.txt`
-3. 安装前端依赖：`cd /Users/chunyi/Documents/Playground/frontend && npm install`
-4. 初始化测试数据：`cd /Users/chunyi/Documents/Playground/backend && PYTHONPATH=. python scripts/seed_data.py`
-5. 启动服务：后端 `cd /Users/chunyi/Documents/Playground/backend && PYTHONPATH=. uvicorn app.main:app --reload`，前端 `cd /Users/chunyi/Documents/Playground/frontend && npm run dev`
+1. 复制环境变量：`cp /Users/chunyi/Documents/caipucodex/.env.example /Users/chunyi/Documents/caipucodex/.env`
+2. 安装后端依赖：`pip install -r /Users/chunyi/Documents/caipucodex/backend/requirements.txt`
+3. 安装前端依赖：`cd /Users/chunyi/Documents/caipucodex/frontend && npm install`
+4. 初始化测试数据：`cd /Users/chunyi/Documents/caipucodex/backend && PYTHONPATH=. python scripts/seed_data.py`
+5. 启动服务：后端 `cd /Users/chunyi/Documents/caipucodex/backend && PYTHONPATH=. uvicorn app.main:app --reload`，前端 `cd /Users/chunyi/Documents/caipucodex/frontend && npm run dev`
 
 ## 一键启停
 
-- 一键启动：`cd /Users/chunyi/Documents/Playground && ./scripts/start.sh`
-- 一键停止：`cd /Users/chunyi/Documents/Playground && ./scripts/stop.sh`
+- 一键启动：`cd /Users/chunyi/Documents/caipucodex && ./scripts/start.sh`
+- 一键停止：`cd /Users/chunyi/Documents/caipucodex && ./scripts/stop.sh`
 - 启动脚本会先自动执行数据库迁移，再后台启动后端和前端
-- 运行日志目录：`/Users/chunyi/Documents/Playground/.run/logs`
-- PID 文件目录：`/Users/chunyi/Documents/Playground/.run/pids`
+- 运行日志目录：`/Users/chunyi/Documents/caipucodex/.run/logs`
+- PID 文件目录：`/Users/chunyi/Documents/caipucodex/.run/pids`
 
 ### 启动前提
 
-- 已存在 `/Users/chunyi/Documents/Playground/.env`
-- 已安装后端依赖并创建虚拟环境：`/Users/chunyi/Documents/Playground/backend/.venv`
-- 已安装前端依赖：`/Users/chunyi/Documents/Playground/frontend/node_modules`
+- 已存在 `/Users/chunyi/Documents/caipucodex/.env`
+- 已安装后端依赖并创建虚拟环境：`/Users/chunyi/Documents/caipucodex/backend/.venv`
+- 已安装前端依赖：`/Users/chunyi/Documents/caipucodex/frontend/node_modules`
 
 ## 默认访问地址
 
@@ -62,5 +62,5 @@
 
 ## 测试
 
-- 后端：`cd /Users/chunyi/Documents/Playground/backend && PYTHONPATH=. pytest`
-- 前端：`cd /Users/chunyi/Documents/Playground/frontend && npm test`
+- 后端：`cd /Users/chunyi/Documents/caipucodex/backend && PYTHONPATH=. pytest`
+- 前端：`cd /Users/chunyi/Documents/caipucodex/frontend && npm test`
