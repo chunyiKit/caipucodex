@@ -11,7 +11,7 @@ export function LoadingPage() {
   const location = useLocation();
   const { showToast } = useToast();
   const { setDraft } = useMenuDraftStore();
-  const state = (location.state as { peopleCount?: number; preferences?: string[] } | null) ?? null;
+  const state = (location.state as { preferences?: string[] } | null) ?? null;
 
   const mutation = useMutation({
     mutationFn: recommendMenu,
@@ -19,7 +19,6 @@ export function LoadingPage() {
       setDraft({
         title: 'AI 推荐菜单',
         menu_date: new Date().toISOString().slice(0, 10),
-        people_count: response.people_count,
         is_ai_generated: true,
         ai_preferences: { preferences: variables.preferences },
         items: response.dishes.map((dish, index) => ({
@@ -42,11 +41,11 @@ export function LoadingPage() {
   });
 
   useEffect(() => {
-    if (!state?.peopleCount) {
+    if (!state) {
       navigate('/', { replace: true });
       return;
     }
-    mutation.mutate({ people_count: state.peopleCount, preferences: state.preferences ?? [] });
+    mutation.mutate({ preferences: state.preferences ?? [] });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

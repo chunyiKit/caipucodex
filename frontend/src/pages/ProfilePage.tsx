@@ -12,7 +12,7 @@ export function ProfilePage() {
           <div>
             <p className="eyebrow">Coming Soon</p>
             <h1>我的</h1>
-            <p>v1 暂时保留为占位页，后续可扩展默认人数、AI 偏好和家庭资料。</p>
+            <p>v1 暂时保留为占位页，后续可扩展 AI 偏好和家庭资料。</p>
           </div>
         </div>
         {isDesktop ? (
@@ -20,7 +20,7 @@ export function ProfilePage() {
             <div className="detail-card">
               <p className="eyebrow">Preferences</p>
               <h2>家庭偏好</h2>
-              <p className="muted">后续可在这里设置默认人数、常用口味、AI 推荐偏好和家庭成员信息。</p>
+              <p className="muted">后续可在这里设置常用口味、AI 推荐偏好和家庭成员信息。</p>
             </div>
             <div className="detail-card">
               <p className="eyebrow">Workspace</p>

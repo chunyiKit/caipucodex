@@ -14,7 +14,6 @@ class Menu(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str | None] = mapped_column(String(100))
     menu_date: Mapped[date] = mapped_column(Date(), nullable=False, server_default=func.current_date())
-    people_count: Mapped[int] = mapped_column(Integer, default=3, nullable=False)
     is_ai_generated: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     ai_preferences: Mapped[dict | None] = mapped_column(JSON())
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=False), server_default=func.now(), nullable=False)

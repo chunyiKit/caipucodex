@@ -1,4 +1,6 @@
-export function QuantityStepper({
+import { memo } from 'react';
+
+function QuantityStepperComponent({
   quantity,
   onDecrease,
   onIncrease,
@@ -15,3 +17,5 @@ export function QuantityStepper({
     </div>
   );
 }
+
+export const QuantityStepper = memo(QuantityStepperComponent, (prev, next) => prev.quantity === next.quantity);

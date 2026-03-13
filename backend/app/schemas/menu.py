@@ -24,7 +24,6 @@ class MenuItemWrite(BaseModel):
 class MenuWrite(BaseModel):
     title: str | None = Field(default=None, max_length=100)
     menu_date: date
-    people_count: int = Field(default=3, ge=1, le=20)
     is_ai_generated: bool = False
     ai_preferences: dict | None = None
     items: list[MenuItemWrite] = Field(min_length=1)
@@ -46,7 +45,6 @@ class MenuSummary(ORMModel):
     id: int
     title: str | None
     menu_date: date
-    people_count: int
     is_ai_generated: bool
     created_at: datetime
     items: list[MenuItemRead]

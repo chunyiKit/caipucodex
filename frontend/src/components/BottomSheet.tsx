@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 
 export function BottomSheet({
@@ -13,6 +13,10 @@ export function BottomSheet({
   children: React.ReactNode;
 }) {
   if (typeof document === 'undefined') return null;
+  const prefersReducedMotion = useReducedMotion();
+  const sheetTransition = prefersReducedMotion
+    ? { duration: 0 }
+    : { duration: 0.24, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] };
 
   return createPortal(
     <AnimatePresence>
@@ -32,7 +36,7 @@ export function BottomSheet({
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
-              transition={{ duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
+              transition={sheetTransition}
             >
               <div className="bottom-sheet__grabber" />
               {title ? <h3>{title}</h3> : null}

@@ -6,7 +6,12 @@ import type { RecipeCard as RecipeCardType } from '@/types';
 export function RecipeCard({ recipe }: { recipe: RecipeCardType }) {
   return (
     <Link to={`/recipes/${recipe.id}`} className="recipe-card">
-      <img src={assetUrl(recipe.image_url) || getPlaceholderImage(recipe.name)} alt={recipe.name} />
+      <img
+        src={assetUrl(recipe.image_url) || getPlaceholderImage(recipe.name)}
+        alt={recipe.name}
+        loading="lazy"
+        decoding="async"
+      />
       <div className="recipe-card__overlay">{recipe.category}</div>
       <div className="recipe-card__body">
         <h3>{recipe.name}</h3>

@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
 type ToastContextValue = {
   showToast: (message: string, tone?: 'success' | 'error') => void;
@@ -9,6 +9,7 @@ const ToastContext = createContext<ToastContextValue | null>(null);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toast, setToast] = useState<{ message: string; tone: 'success' | 'error' } | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   const value = useMemo(
     () => ({
@@ -30,6 +31,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             initial={{ opacity: 0, y: -24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
+            transition={prefersReducedMotion ? { duration: 0 } : undefined}
             className={`toast toast--${toast.tone}`}
           >
             {toast.message}

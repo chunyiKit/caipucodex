@@ -59,7 +59,7 @@ export function HistoryPage() {
                   <div className="section-title"><h2>{group}</h2></div>
                   <div className="list-stack">
                     {menus?.map((menu, index) => (
-                      <StaggerItem key={menu.id} index={index}>
+                      <StaggerItem key={menu.id} index={index} disabled={!isDesktop}>
                         <SwipeActionRow actionLabel="删除" onAction={() => setPendingDelete({ id: menu.id, title: menu.title || '家庭菜单' })}>
                           <button type="button" className={`history-card history-card--interactive history-card--desktop-row pressable-card ${selectedMenu?.id === menu.id ? 'is-selected' : ''}`} onClick={() => setSelectedMenuId(menu.id)}>
                             <div className="history-card__link">
@@ -81,7 +81,7 @@ export function HistoryPage() {
                 <>
                   <p className="eyebrow">Preview</p>
                   <h2>{selectedMenu.title || '家庭菜单'}</h2>
-                  <p className="muted">{formatDateLong(selectedMenu.menu_date)} · {selectedMenu.people_count} 人</p>
+                  <p className="muted">{formatDateLong(selectedMenu.menu_date)}</p>
                   <div className="desktop-summary-list">
                     {selectedMenu.items.map((item) => (
                       <div key={`${item.recipe_name}-${item.sort_order}`}>
@@ -101,7 +101,7 @@ export function HistoryPage() {
               <div className="section-title"><h2>{group}</h2></div>
               <div className="list-stack">
                 {menus?.map((menu, index) => (
-                  <StaggerItem key={menu.id} index={index}>
+                  <StaggerItem key={menu.id} index={index} disabled>
                     <SwipeActionRow
                       actionLabel="删除"
                       onAction={() => setPendingDelete({ id: menu.id, title: menu.title || '家庭菜单' })}

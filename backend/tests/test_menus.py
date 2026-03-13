@@ -35,7 +35,6 @@ def test_menu_save_and_ingredient_merge(client):
         json={
             "title": "今晚吃什么",
             "menu_date": "2026-03-11",
-            "people_count": 3,
             "is_ai_generated": False,
             "items": [
                 {
@@ -80,7 +79,6 @@ def test_delete_menu(client):
         json={
             "title": "AI 推荐菜单",
             "menu_date": "2026-03-11",
-            "people_count": 4,
             "is_ai_generated": True,
             "ai_preferences": {"preferences": ["少油"]},
             "items": [

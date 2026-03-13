@@ -30,7 +30,6 @@ def create_menu(payload: MenuWrite, db: Session = Depends(get_db)) -> Menu:
     menu = Menu(
         title=payload.title,
         menu_date=payload.menu_date,
-        people_count=payload.people_count,
         is_ai_generated=payload.is_ai_generated,
         ai_preferences=payload.ai_preferences,
     )

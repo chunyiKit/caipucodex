@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export function EmptyState({
   title,
@@ -13,6 +13,19 @@ export function EmptyState({
   icon?: string;
   accent?: 'default' | 'calm' | 'warm';
 }) {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) {
+    return (
+      <div className={`empty-state empty-state--${accent}`}>
+        <div className="empty-state__icon">{icon}</div>
+        <h3>{title}</h3>
+        <p>{description}</p>
+        {action}
+      </div>
+    );
+  }
+
   return (
     <motion.div
       className={`empty-state empty-state--${accent}`}

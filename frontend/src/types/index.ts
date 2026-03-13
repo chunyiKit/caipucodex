@@ -59,7 +59,6 @@ export interface MenuDetail {
   id: number;
   title?: string | null;
   menu_date: string;
-  people_count: number;
   is_ai_generated: boolean;
   created_at: string;
   ai_preferences?: Record<string, unknown> | null;
@@ -69,7 +68,6 @@ export interface MenuDetail {
 export interface MenuPayload {
   title?: string | null;
   menu_date: string;
-  people_count: number;
   is_ai_generated: boolean;
   ai_preferences?: Record<string, unknown> | null;
   items: MenuItem[];
@@ -87,7 +85,6 @@ export interface IngredientsResponse {
 }
 
 export interface AIRecommendResponse {
-  people_count: number;
   dishes: {
     recipe_id?: number | null;
     name: string;

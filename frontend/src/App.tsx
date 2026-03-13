@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, MotionConfig, useReducedMotion } from 'framer-motion';
 import { AppShell } from './layouts/AppShell';
+import { useBreakpoint } from './hooks/useBreakpoint';
 import { HomePage } from './pages/HomePage';
 import { RecipeListPage } from './pages/RecipeListPage';
 import { RecipeDetailPage } from './pages/RecipeDetailPage';
@@ -22,25 +23,35 @@ const pageMotion = {
 
 function AnimatedRoutes() {
   const location = useLocation();
+  const { isDesktop } = useBreakpoint();
+  const prefersReducedMotion = useReducedMotion();
+
+  const routes = (
+    <Routes location={location}>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/order" element={<OrderPage />} />
+      <Route path="/recipes" element={<RecipeListPage />} />
+      <Route path="/recipes/new" element={<RecipeEditPage />} />
+      <Route path="/recipes/:id" element={<RecipeDetailPage />} />
+      <Route path="/recipes/:id/edit" element={<RecipeEditPage />} />
+      <Route path="/history" element={<HistoryPage />} />
+      <Route path="/menus/preview" element={<MenuPreviewPage />} />
+      <Route path="/menus/:id" element={<MenuDetailPage />} />
+      <Route path="/menus/:id/ingredients" element={<IngredientsPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/ai/loading" element={<LoadingPage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+
+  if (!isDesktop || prefersReducedMotion) {
+    return routes;
+  }
 
   return (
     <AnimatePresence mode="wait">
       <motion.div key={location.pathname} {...pageMotion}>
-        <Routes location={location}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/order" element={<OrderPage />} />
-          <Route path="/recipes" element={<RecipeListPage />} />
-          <Route path="/recipes/new" element={<RecipeEditPage />} />
-          <Route path="/recipes/:id" element={<RecipeDetailPage />} />
-          <Route path="/recipes/:id/edit" element={<RecipeEditPage />} />
-          <Route path="/history" element={<HistoryPage />} />
-          <Route path="/menus/preview" element={<MenuPreviewPage />} />
-          <Route path="/menus/:id" element={<MenuDetailPage />} />
-          <Route path="/menus/:id/ingredients" element={<IngredientsPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/ai/loading" element={<LoadingPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        {routes}
       </motion.div>
     </AnimatePresence>
   );
@@ -48,8 +59,10 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <AppShell>
-      <AnimatedRoutes />
-    </AppShell>
+    <MotionConfig reducedMotion="user">
+      <AppShell>
+        <AnimatedRoutes />
+      </AppShell>
+    </MotionConfig>
   );
 }

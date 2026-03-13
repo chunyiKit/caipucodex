@@ -109,3 +109,40 @@ Node.js v24.11.1
   VITE v6.4.1  ready in 130 ms
 
   ➜  Local:   http://127.0.0.1:5173/
+3:42:59 PM [vite] (client) hmr update /src/pages/MenuPreviewPage.tsx
+3:44:01 PM [vite] (client) hmr update /src/styles/index.css
+3:44:13 PM [vite] (client) hmr update /src/styles/index.css
+3:44:19 PM [vite] (client) hmr update /src/styles/index.css
+4:02:20 PM [vite] (client) hmr update /src/App.tsx
+4:02:20 PM [vite] (client) hmr update /src/components/StaggerItem.tsx
+4:02:20 PM [vite] (client) hmr update /src/components/EmptyState.tsx
+4:02:20 PM [vite] (client) hmr update /src/components/ActionSheet.tsx
+4:02:20 PM [vite] (client) hmr update /src/components/BottomSheet.tsx
+4:02:20 PM [vite] (client) hmr update /src/components/ToastProvider.tsx
+4:02:20 PM [vite] (client) hmr update /src/components/RecipeListItem.tsx
+4:02:20 PM [vite] (client) hmr update /src/components/QuantityStepper.tsx
+4:02:20 PM [vite] (client) hmr update /src/pages/HistoryPage.tsx
+4:02:20 PM [vite] (client) hmr update /src/pages/MenuPreviewPage.tsx
+4:03:47 PM [vite] (client) hmr update /src/pages/OrderPage.tsx
+4:04:00 PM [vite] (client) hmr update /src/pages/OrderPage.tsx
+4:05:24 PM [vite] (client) hmr update /src/styles/index.css
+4:05:36 PM [vite] (client) hmr update /src/components/RecipeCard.tsx
+4:06:42 PM [vite] (client) hmr update /src/components/RecipeListItem.tsx
+4:06:42 PM [vite] (client) hmr update /src/pages/OrderPage.tsx
+4:06:50 PM [vite] (client) hmr update /src/components/RecipeListItem.tsx
+4:06:51 PM [vite] (client) hmr update /src/pages/OrderPage.tsx
+4:06:53 PM [vite] (client) hmr update /src/pages/MenuPreviewPage.tsx
+5:15:41 PM [vite] (client) hmr update /src/pages/MenuDetailPage.tsx
+5:15:49 PM [vite] (client) hmr update /src/pages/MenuDetailPage.tsx
+5:15:55 PM [vite] (client) hmr update /src/styles/index.css
+9:08:33 PM [vite] (client) hmr update /src/components/TopBar.tsx
+9:08:33 PM [vite] (client) hmr update /src/pages/OrderPage.tsx
+9:12:03 PM [vite] (client) hmr update /src/pages/MenuPreviewPage.tsx
+9:19:13 PM [vite] (client) hmr update /src/pages/LoadingPage.tsx
+9:19:13 PM [vite] (client) hmr update /src/pages/OrderPage.tsx
+9:19:13 PM [vite] (client) hmr update /src/pages/HomePage.tsx
+9:19:13 PM [vite] (client) hmr update /src/pages/LoadingPage.tsx
+9:19:13 PM [vite] (client) hmr update /src/pages/MenuPreviewPage.tsx
+9:19:13 PM [vite] (client) hmr update /src/pages/HistoryPage.tsx
+9:19:13 PM [vite] (client) hmr update /src/pages/MenuDetailPage.tsx
+9:19:13 PM [vite] (client) hmr update /src/pages/ProfilePage.tsx

@@ -29,9 +29,9 @@ RECIPES = [
 ]
 
 MENUS = [
-    {"title": "周二晚餐", "offset": 2, "people_count": 3, "items": ["红烧排骨", "蒜蓉西兰花", "冬瓜排骨汤"]},
-    {"title": "周末家宴", "offset": 6, "people_count": 5, "items": ["糖醋里脊", "鱼香茄子", "玉米排骨汤", "蛋炒饭"]},
-    {"title": "清爽工作日晚餐", "offset": 12, "people_count": 2, "items": ["番茄炒蛋", "凉拌黄瓜", "香煎豆腐"]},
+    {"title": "周二晚餐", "offset": 2, "items": ["红烧排骨", "蒜蓉西兰花", "冬瓜排骨汤"]},
+    {"title": "周末家宴", "offset": 6, "items": ["糖醋里脊", "鱼香茄子", "玉米排骨汤", "蛋炒饭"]},
+    {"title": "清爽工作日晚餐", "offset": 12, "items": ["番茄炒蛋", "凉拌黄瓜", "香煎豆腐"]},
 ]
 
 SVG_TEMPLATE = """<svg width='640' height='480' xmlns='http://www.w3.org/2000/svg'>
@@ -84,7 +84,6 @@ def main() -> None:
             menu = Menu(
                 title=payload["title"],
                 menu_date=date.today() - timedelta(days=payload["offset"]),
-                people_count=payload["people_count"],
                 is_ai_generated=False,
             )
             for index, name in enumerate(payload["items"]):

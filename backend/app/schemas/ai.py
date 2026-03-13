@@ -4,7 +4,6 @@ from app.constants import REAL_CATEGORIES
 
 
 class AIRecommendRequest(BaseModel):
-    people_count: int = Field(ge=1, le=20)
     preferences: list[str] = Field(default_factory=list)
 
 
@@ -23,5 +22,4 @@ class AIRecommendedDish(BaseModel):
 
 
 class AIRecommendResponse(BaseModel):
-    people_count: int
     dishes: list[AIRecommendedDish]

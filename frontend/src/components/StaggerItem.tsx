@@ -1,14 +1,22 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export function StaggerItem({
   children,
   index = 0,
   className,
+  disabled = false,
 }: {
   children: React.ReactNode;
   index?: number;
   className?: string;
+  disabled?: boolean;
 }) {
+  const prefersReducedMotion = useReducedMotion();
+
+  if (disabled || prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       className={className}

@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { getRecipes } from '@/api/recipes';
@@ -28,6 +28,7 @@ interface FlyingItem {
 export function OrderPage() {
   const navigate = useNavigate();
   const { isDesktop } = useBreakpoint();
+  const prefersReducedMotion = useReducedMotion();
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState('全部');
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -36,32 +37,38 @@ export function OrderPage() {
   const [pendingRemove, setPendingRemove] = useState<{ id: number; name: string } | null>(null);
   const lastCountRef = useRef(0);
   const cartTargetRef = useRef<HTMLElement | null>(null);
-  const orderStore = useOrderStore();
+  const items = useOrderStore((state) => state.items);
+  const addRecipe = useOrderStore((state) => state.addRecipe);
+  const updateQuantity = useOrderStore((state) => state.updateQuantity);
+  const removeRecipe = useOrderStore((state) => state.removeRecipe);
   const setDraft = useMenuDraftStore((state) => state.setDraft);
   const query = useQuery({
     queryKey: ['recipes', 'order', activeCategory, search],
     queryFn: () => getRecipes({ category: activeCategory, search }),
   });
   const recipes = useMemo(() => query.data ?? [], [query.data]);
+  const selectedCounts = useMemo(() => new Map(items.map((item) => [item.recipe_id, item.quantity] as const)), [items]);
+  const enableListAnimations = isDesktop && !prefersReducedMotion;
+  const enableFlyAnimation = isDesktop && !prefersReducedMotion;
 
   useEffect(() => {
-    if (orderStore.items.length > lastCountRef.current) {
+    if (items.length > lastCountRef.current) {
       setBarPulse(true);
       const timer = window.setTimeout(() => setBarPulse(false), 360);
-      lastCountRef.current = orderStore.items.length;
+      lastCountRef.current = items.length;
       return () => window.clearTimeout(timer);
     }
-    lastCountRef.current = orderStore.items.length;
+    lastCountRef.current = items.length;
     return undefined;
-  }, [orderStore.items.length]);
+  }, [items.length]);
 
-  const triggerFlyAnimation = (target?: HTMLElement | null, label?: string) => {
-    if (!target || !cartTargetRef.current) return;
+  const triggerFlyAnimation = useCallback((target?: HTMLElement | null, label?: string) => {
+    if (!enableFlyAnimation || !target || !cartTargetRef.current) return;
     const sourceRect = target.getBoundingClientRect();
     const destinationRect = cartTargetRef.current.getBoundingClientRect();
     const id = Date.now() + Math.random();
     setFlyingItems((current) => [
-      ...current,
+      ...current.slice(-1),
       {
         id,
         label: (label || '菜').slice(0, 1),
@@ -71,30 +78,31 @@ export function OrderPage() {
         endY: destinationRect.top + destinationRect.height / 2,
       },
     ]);
-  };
+  }, [enableFlyAnimation]);
 
-  const handleAdd = (recipeId: number, recipeName: string, target?: HTMLElement | null) => {
-    const recipe = recipes.find((item) => item.id === recipeId);
-    if (!recipe) return;
-    orderStore.addRecipe(recipe);
-    triggerFlyAnimation(target, recipeName);
-  };
+  const handleAddRecipe = useCallback((recipe: (typeof recipes)[number], target?: HTMLElement | null) => {
+    addRecipe(recipe);
+    triggerFlyAnimation(target, recipe.name);
+  }, [addRecipe, triggerFlyAnimation]);
 
-  const createDraft = () => {
+  const handleDecrease = useCallback((recipeId: number) => {
+    updateQuantity(recipeId, -1);
+  }, [updateQuantity]);
+
+  const createDraft = useCallback(() => {
     setDraft({
       title: '今日菜单',
       menu_date: new Date().toISOString().slice(0, 10),
-      people_count: 3,
       is_ai_generated: false,
-      items: orderStore.items,
+      items,
     });
     setSheetOpen(false);
     navigate('/menus/preview');
-  };
+  }, [items, navigate, setDraft]);
 
   return (
     <Screen className={isDesktop ? 'order-page order-page--desktop' : 'order-page'}>
-      {!isDesktop ? <TopBar title="点菜" /> : null}
+      {!isDesktop ? <TopBar title="点菜" onBack={() => navigate('/')} /> : null}
 
       {isDesktop ? (
         <div className="desktop-order-layout">
@@ -122,15 +130,15 @@ export function OrderPage() {
             <div className="list-stack desktop-order-list">
               {recipes.length ? (
                 recipes.map((recipe, index) => {
-                  const selected = orderStore.items.find((item) => item.recipe_id === recipe.id)?.quantity;
+                  const selected = selectedCounts.get(recipe.id);
                   return (
-                    <StaggerItem key={recipe.id} index={index}>
-                      <RecipeListItem
-                        recipe={recipe}
-                        quantity={selected}
-                        onAdd={(target) => handleAdd(recipe.id, recipe.name, target)}
-                        onDecrease={() => orderStore.updateQuantity(recipe.id, -1)}
-                      />
+                    <StaggerItem key={recipe.id} index={index} disabled={!enableListAnimations}>
+                        <RecipeListItem
+                          recipe={recipe}
+                          quantity={selected}
+                          onAdd={handleAddRecipe}
+                          onDecrease={handleDecrease}
+                        />
                     </StaggerItem>
                   );
                 })
@@ -151,20 +159,29 @@ export function OrderPage() {
                 <p className="eyebrow">Cart</p>
                 <h2>已选菜品</h2>
               </div>
-              <span className="desktop-order-cart__count">{orderStore.items.length}</span>
+              <span className="desktop-order-cart__count">{items.length}</span>
             </div>
             <div className="cart-list desktop-order-cart__list">
-              {orderStore.items.length ? (
-                orderStore.items.map((item) => (
+              {items.length ? (
+                items.map((item) => (
                   <div key={item.recipe_name} className="cart-item cart-item--desktop">
                     <div>
                       <strong>{item.recipe_name}</strong>
                       <p>{item.recipe_category}</p>
                     </div>
                     <div className="cart-item__actions">
-                      <button type="button" className="ghost-button small" onClick={() => item.recipe_id && orderStore.updateQuantity(item.recipe_id, -1)}>-</button>
+                      <button type="button" className="ghost-button small" onClick={() => item.recipe_id && handleDecrease(item.recipe_id)}>-</button>
                       <span className="cart-item__count">{item.quantity}</span>
-                      <button type="button" className="ghost-button small" onClick={(event) => item.recipe_id && handleAdd(item.recipe_id, item.recipe_name, event.currentTarget)}>+</button>
+                      <button
+                        type="button"
+                        className="ghost-button small"
+                        onClick={(event) => {
+                          const recipe = recipes.find((entry) => entry.id === item.recipe_id);
+                          if (recipe) handleAddRecipe(recipe, event.currentTarget);
+                        }}
+                      >
+                        +
+                      </button>
                       <button type="button" className="ghost-button small" onClick={() => item.recipe_id && setPendingRemove({ id: item.recipe_id, name: item.recipe_name })}>移除</button>
                     </div>
                   </div>
@@ -173,7 +190,7 @@ export function OrderPage() {
                 <EmptyState icon="🧺" accent="warm" title="购物篮还是空的" description="从左边和中间挑几道菜，右侧会自动汇总。" />
               )}
             </div>
-            <button type="button" className="primary-button" onClick={createDraft} disabled={!orderStore.items.length}>生成菜单</button>
+            <button type="button" className="primary-button" onClick={createDraft} disabled={!items.length}>生成菜单</button>
           </aside>
         </div>
       ) : (
@@ -181,7 +198,7 @@ export function OrderPage() {
           <input className="search-input" placeholder="搜索菜品" value={search} onChange={(event) => setSearch(event.target.value)} />
           <div className="category-scroll">
             {categories.map((category, index) => (
-              <StaggerItem key={category} index={index}>
+              <StaggerItem key={category} index={index} disabled>
                 <button
                   type="button"
                   className={`category-chip ${activeCategory === category ? 'is-active' : ''}`}
@@ -195,14 +212,14 @@ export function OrderPage() {
           <div className="list-stack with-bottom-bar">
             {recipes.length ? (
               recipes.map((recipe, index) => {
-                const selected = orderStore.items.find((item) => item.recipe_id === recipe.id)?.quantity;
+                const selected = selectedCounts.get(recipe.id);
                 return (
-                  <StaggerItem key={recipe.id} index={index}>
+                  <StaggerItem key={recipe.id} index={index} disabled>
                     <RecipeListItem
                       recipe={recipe}
                       quantity={selected}
-                      onAdd={(target) => handleAdd(recipe.id, recipe.name, target)}
-                      onDecrease={() => orderStore.updateQuantity(recipe.id, -1)}
+                      onAdd={handleAddRecipe}
+                      onDecrease={handleDecrease}
                     />
                   </StaggerItem>
                 );
@@ -220,14 +237,14 @@ export function OrderPage() {
           <button
             ref={cartTargetRef as React.RefObject<HTMLButtonElement>}
             type="button"
-            className={`selection-bar ${orderStore.items.length ? 'is-active' : ''} ${barPulse ? 'is-pulsing' : ''}`}
-            onClick={() => orderStore.items.length && setSheetOpen(true)}
+            className={`selection-bar ${items.length ? 'is-active' : ''} ${barPulse ? 'is-pulsing' : ''}`}
+            onClick={() => items.length && setSheetOpen(true)}
           >
             <div>
-              <strong>{orderStore.items.length ? `已选 ${orderStore.items.length} 道菜` : '还没有选择菜品'}</strong>
+              <strong>{items.length ? `已选 ${items.length} 道菜` : '还没有选择菜品'}</strong>
               <div className="selection-bar__thumbs">
-                {orderStore.items.length ? (
-                  orderStore.items.slice(0, 5).map((item) => (
+                {items.length ? (
+                  items.slice(0, 5).map((item) => (
                     <span key={item.recipe_name} className="thumb-dot">{item.recipe_name.slice(0, 1)}</span>
                   ))
                 ) : (
@@ -240,9 +257,9 @@ export function OrderPage() {
 
           <BottomSheet open={sheetOpen} onClose={() => setSheetOpen(false)} title="已选菜品">
             <div className="cart-list">
-              {orderStore.items.length ? (
-                orderStore.items.map((item, index) => (
-                  <StaggerItem key={item.recipe_name} index={index}>
+              {items.length ? (
+                items.map((item, index) => (
+                  <StaggerItem key={item.recipe_name} index={index} disabled>
                     <SwipeActionRow
                       actionLabel="删除"
                       onAction={() => item.recipe_id && setPendingRemove({ id: item.recipe_id, name: item.recipe_name })}
@@ -253,9 +270,18 @@ export function OrderPage() {
                           <p>{item.recipe_category}</p>
                         </div>
                         <div className="cart-item__actions">
-                          <button type="button" className="ghost-button small" onClick={() => item.recipe_id && orderStore.updateQuantity(item.recipe_id, -1)}>-</button>
+                          <button type="button" className="ghost-button small" onClick={() => item.recipe_id && handleDecrease(item.recipe_id)}>-</button>
                           <span className="cart-item__count">{item.quantity}</span>
-                          <button type="button" className="ghost-button small" onClick={(event) => item.recipe_id && handleAdd(item.recipe_id, item.recipe_name, event.currentTarget)}>+</button>
+                          <button
+                            type="button"
+                            className="ghost-button small"
+                            onClick={(event) => {
+                              const recipe = recipes.find((entry) => entry.id === item.recipe_id);
+                              if (recipe) handleAddRecipe(recipe, event.currentTarget);
+                            }}
+                          >
+                            +
+                          </button>
                         </div>
                       </div>
                     </SwipeActionRow>
@@ -265,7 +291,7 @@ export function OrderPage() {
                 <EmptyState icon="🧺" title="购物篮还是空的" description="挑几道喜欢的菜，底部会自动汇总到这里。" accent="warm" />
               )}
             </div>
-            <button type="button" className="primary-button" onClick={createDraft} disabled={!orderStore.items.length}>生成菜单</button>
+            <button type="button" className="primary-button" onClick={createDraft} disabled={!items.length}>生成菜单</button>
           </BottomSheet>
         </>
       )}
@@ -276,27 +302,29 @@ export function OrderPage() {
         description={pendingRemove ? `“${pendingRemove.name}” 将从当前购物篮中移除。` : ''}
         confirmLabel="确认删除"
         onConfirm={() => {
-          if (pendingRemove) orderStore.removeRecipe(pendingRemove.id);
+          if (pendingRemove) removeRecipe(pendingRemove.id);
           setPendingRemove(null);
         }}
         onCancel={() => setPendingRemove(null)}
       />
 
-      <AnimatePresence>
-        {flyingItems.map((item) => (
-          <motion.div
-            key={item.id}
-            className="fly-token"
-            initial={{ x: item.startX - 18, y: item.startY - 18, scale: 1, opacity: 0.95 }}
-            animate={{ x: item.endX - 18, y: item.endY - 18, scale: 0.34, opacity: 0.2 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-            onAnimationComplete={() => setFlyingItems((current) => current.filter((entry) => entry.id !== item.id))}
-          >
-            {item.label}
-          </motion.div>
-        ))}
-      </AnimatePresence>
+      {enableFlyAnimation ? (
+        <AnimatePresence>
+          {flyingItems.map((item) => (
+            <motion.div
+              key={item.id}
+              className="fly-token"
+              initial={{ x: item.startX - 18, y: item.startY - 18, scale: 1, opacity: 0.95 }}
+              animate={{ x: item.endX - 18, y: item.endY - 18, scale: 0.34, opacity: 0.2 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+              onAnimationComplete={() => setFlyingItems((current) => current.filter((entry) => entry.id !== item.id))}
+            >
+              {item.label}
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      ) : null}
     </Screen>
   );
 }

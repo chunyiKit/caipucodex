@@ -16,7 +16,6 @@ export function HomePage() {
   const navigate = useNavigate();
   const { isDesktop } = useBreakpoint();
   const [open, setOpen] = useState(false);
-  const [peopleCount, setPeopleCount] = useState(3);
   const [preferences, setPreferences] = useState<string[]>([]);
   const recipesQuery = useQuery({ queryKey: ['recipes', 'home'], queryFn: () => getRecipes() });
   const menusQuery = useQuery({ queryKey: ['menus'], queryFn: getMenus });
@@ -53,7 +52,7 @@ export function HomePage() {
               <div>
                 <p className="eyebrow">智能搭配</p>
                 <h2>AI 帮你配菜</h2>
-                <p>输入人数和偏好，快速生成荤素搭配。</p>
+                <p>输入偏好，快速生成一份荤素搭配。</p>
               </div>
               <span className="hero-card__emoji">✨</span>
             </button>
@@ -97,14 +96,6 @@ export function HomePage() {
 
       <BottomSheet open={open} onClose={() => setOpen(false)} title="AI 智能配菜">
         <div className="sheet-section">
-          <label className="field-label">人数</label>
-          <div className="quantity-stepper quantity-stepper--wide">
-            <button type="button" onClick={() => setPeopleCount((value) => Math.max(1, value - 1))}>-</button>
-            <span>{peopleCount} 人</span>
-            <button type="button" onClick={() => setPeopleCount((value) => Math.min(20, value + 1))}>+</button>
-          </div>
-        </div>
-        <div className="sheet-section">
           <label className="field-label">偏好</label>
           <div className="pill-row">
             {preferenceOptions.map((option) => (
@@ -128,7 +119,7 @@ export function HomePage() {
           className="primary-button"
           onClick={() => {
             setOpen(false);
-            navigate('/ai/loading', { state: { peopleCount, preferences } });
+            navigate('/ai/loading', { state: { preferences } });
           }}
         >
           开始推荐
