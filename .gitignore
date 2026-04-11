@@ -28,5 +28,8 @@ backend/uploads/recipes/*.jpg
 backend/uploads/recipes/*.jpeg
 backend/uploads/recipes/*.webp
 
+# Claude Code
+.claude/
+
 # OS
 .DS_Store
