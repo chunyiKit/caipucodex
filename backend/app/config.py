@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     openai_base_url: str | None = None
     openai_model: str = "gpt-4o-mini"
     openai_timeout_seconds: int = 30
+    ark_api_key: str = ""
+    ark_base_url: str = "https://ark.cn-beijing.volces.com/api/v3"
+    ark_image_model: str = "doubao-seedream-5-0-260128"
 
     model_config = SettingsConfigDict(
         env_file=(BASE_DIR.parent / ".env", BASE_DIR / ".env"),

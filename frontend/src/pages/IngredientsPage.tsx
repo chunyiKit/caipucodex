@@ -1,12 +1,16 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { Check, Copy } from 'lucide-react';
 import { getMenuIngredients } from '@/api/menus';
 import { EmptyState } from '@/components/EmptyState';
 import { Screen } from '@/components/Screen';
 import { TopBar } from '@/components/TopBar';
 import { useToast } from '@/components/ToastProvider';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
+import { cn } from '@/lib/utils';
 import { buildIngredientsClipboardText } from '@/utils/format';
 
 export function IngredientsPage() {
@@ -28,22 +32,32 @@ export function IngredientsPage() {
   }
 
   return (
-    <Screen className={isDesktop ? 'ingredients-page ingredients-page--desktop' : 'ingredients-page'}>
+    <Screen>
       <TopBar title="采购清单" />
-      <div className={isDesktop ? 'desktop-content-with-aside' : ''}>
-        <div className="desktop-content-with-aside__main">
+
+      <div className={isDesktop ? 'grid grid-cols-[minmax(0,1fr)_340px] gap-6 items-start' : ''}>
+        <div>
           {groups.map((group) => (
-            <section className="detail-card" key={group.category}>
-              <div className="section-title"><h2>{group.category}</h2></div>
-              <div className="detail-list">
-                {group.items.map((item) => {
+            <section className="p-5 rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)] mb-4" key={group.category}>
+              <h2 className="m-0 mb-4 text-base font-semibold">{group.category}</h2>
+              <div className="flex flex-col">
+                {group.items.map((item, index) => {
                   const key = `${group.category}-${item.name}`;
                   const isPurchased = purchased[key];
                   return (
-                    <button type="button" className={`ingredient-check ${isPurchased ? 'is-purchased' : ''}`} key={key} onClick={() => setPurchased((current) => ({ ...current, [key]: !current[key] }))}>
-                      <span className="checkbox-circle">{isPurchased ? '✓' : ''}</span>
-                      <span>{item.name}</span>
-                      <strong>{item.amount || '-'}</strong>
+                    <button
+                      type="button"
+                      className={cn(
+                        'flex items-center gap-3 py-3 text-left transition-colors',
+                        index < group.items.length - 1 && 'border-b border-[var(--border-color)]',
+                        isPurchased && 'opacity-50',
+                      )}
+                      key={key}
+                      onClick={() => setPurchased((current) => ({ ...current, [key]: !current[key] }))}
+                    >
+                      <Checkbox checked={isPurchased} className="rounded-md" />
+                      <span className={cn('flex-1 text-sm', isPurchased && 'line-through')}>{item.name}</span>
+                      <strong className={cn('text-sm text-[var(--text-secondary)]', isPurchased && 'line-through')}>{item.amount || '-'}</strong>
                     </button>
                   );
                 })}
@@ -51,30 +65,42 @@ export function IngredientsPage() {
             </section>
           ))}
         </div>
-        <aside className={isDesktop ? 'desktop-panel desktop-content-with-aside__side' : ''}>
+
+        {/* Sidebar */}
+        <aside className={isDesktop ? 'sticky top-0 p-5 rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)]' : ''}>
           {isDesktop ? (
             <>
-              <p className="eyebrow">Checklist</p>
-              <h2>采购进度</h2>
-              <div className="desktop-summary-list">
-                <div><span>食材种类</span><strong>{query.data?.total_count || 0}</strong></div>
-                <div><span>已购买</span><strong>{totalPurchased}</strong></div>
-                <div><span>未购买</span><strong>{(query.data?.total_count || 0) - totalPurchased}</strong></div>
+              <p className="text-[11px] font-semibold tracking-wider uppercase text-[var(--brand)] mb-1">Checklist</p>
+              <h2 className="text-lg font-semibold m-0 mb-4">采购进度</h2>
+              <div className="flex flex-col mb-4">
+                {[
+                  ['食材种类', `${query.data?.total_count || 0}`],
+                  ['已购买', `${totalPurchased}`],
+                  ['未购买', `${(query.data?.total_count || 0) - totalPurchased}`],
+                ].map(([label, value], index) => (
+                  <div key={label} className={`flex justify-between gap-3 py-3 ${index < 2 ? 'border-b border-[var(--border-color)]' : ''}`}>
+                    <span className="text-sm text-[var(--text-secondary)]">{label}</span>
+                    <strong className="text-sm">{value}</strong>
+                  </div>
+                ))}
               </div>
             </>
           ) : null}
-          <div className="bottom-actions sticky desktop-actions-stack">
-            <div className="stats-text">共 {query.data?.total_count || 0} 种食材，已购 {totalPurchased} 种</div>
-            <button
-              type="button"
-              className="primary-button compact"
+          <div className="flex flex-col gap-2.5 mt-2 lg:mt-0">
+            <div className="flex items-center text-sm text-[var(--text-secondary)]">
+              <Check size={14} className="mr-1" />
+              共 {query.data?.total_count || 0} 种食材，已购 {totalPurchased} 种
+            </div>
+            <Button
+              className="w-full h-11 rounded-xl bg-[var(--brand)] hover:bg-[var(--brand-deep)] text-white font-semibold"
               onClick={async () => {
                 await navigator.clipboard.writeText(buildIngredientsClipboardText(groups));
                 showToast('清单已复制');
               }}
             >
+              <Copy size={14} className="mr-1.5" />
               一键复制清单
-            </button>
+            </Button>
           </div>
         </aside>
       </div>

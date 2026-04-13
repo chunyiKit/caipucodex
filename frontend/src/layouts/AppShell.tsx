@@ -13,19 +13,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   if (isDesktop) {
     return (
-      <div className="app-shell app-shell--desktop">
+      <div className="app-shell--desktop min-h-screen">
         <DesktopSidebar />
-        <div className="app-shell__desktop-main">
+        <div className="min-w-0 flex flex-col">
           <DesktopTopbar />
-          <main className="app-shell__content app-shell__content--desktop">{children}</main>
+          <main className="flex-1 px-6 pb-10">{children}</main>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="app-shell">
-      <main className={`app-shell__content ${showTabBar ? 'with-tab-bar' : ''}`}>{children}</main>
+    <div className="min-h-screen bg-white">
+      <main className={showTabBar ? 'pb-[calc(92px+var(--safe-bottom))]' : ''}>{children}</main>
       {showTabBar ? <TabBar /> : null}
     </div>
   );

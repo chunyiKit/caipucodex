@@ -23,3 +23,12 @@ class AIRecommendedDish(BaseModel):
 
 class AIRecommendResponse(BaseModel):
     dishes: list[AIRecommendedDish]
+
+
+class GenerateCoverRequest(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    ingredients: list[str] = Field(default_factory=list)
+
+
+class GenerateCoverResponse(BaseModel):
+    url: str

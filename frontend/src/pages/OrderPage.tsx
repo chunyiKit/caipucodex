@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { Search, Minus, Plus, X, ShoppingCart } from 'lucide-react';
+import { getCategories } from '@/api/categories';
 import { getRecipes } from '@/api/recipes';
 import { ActionSheet } from '@/components/ActionSheet';
 import { BottomSheet } from '@/components/BottomSheet';
@@ -11,10 +13,14 @@ import { Screen } from '@/components/Screen';
 import { StaggerItem } from '@/components/StaggerItem';
 import { SwipeActionRow } from '@/components/SwipeActionRow';
 import { TopBar } from '@/components/TopBar';
-import { categories } from '@/constants/categories';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { defaultCategories } from '@/constants/categories';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useMenuDraftStore } from '@/store/menuDraftStore';
 import { useOrderStore } from '@/store/orderStore';
+import { cn } from '@/lib/utils';
 
 interface FlyingItem {
   id: number;
@@ -42,6 +48,8 @@ export function OrderPage() {
   const updateQuantity = useOrderStore((state) => state.updateQuantity);
   const removeRecipe = useOrderStore((state) => state.removeRecipe);
   const setDraft = useMenuDraftStore((state) => state.setDraft);
+  const categoriesQuery = useQuery({ queryKey: ['categories'], queryFn: getCategories });
+  const categories = useMemo(() => categoriesQuery.data ?? defaultCategories, [categoriesQuery.data]);
   const query = useQuery({
     queryKey: ['recipes', 'order', activeCategory, search],
     queryFn: () => getRecipes({ category: activeCategory, search }),
@@ -101,22 +109,31 @@ export function OrderPage() {
   }, [items, navigate, setDraft]);
 
   return (
-    <Screen className={isDesktop ? 'order-page order-page--desktop' : 'order-page'}>
+    <Screen>
       {!isDesktop ? <TopBar title="点菜" onBack={() => navigate('/')} /> : null}
 
       {isDesktop ? (
-        <div className="desktop-order-layout">
-          <aside className="desktop-panel desktop-order-sidebar">
-            <p className="eyebrow">Filters</p>
-            <h2>今天想做什么</h2>
-            <p className="muted">先筛分类，再在中间列表里挑菜，右侧会实时汇总已选内容。</p>
-            <input className="search-input" placeholder="搜索菜品" value={search} onChange={(event) => setSearch(event.target.value)} />
-            <div className="desktop-filter-list">
+        <div className="grid grid-cols-[280px_minmax(0,1fr)_360px] gap-6 items-start">
+          {/* Filters */}
+          <aside className="sticky top-0 p-5 rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)]">
+            <p className="text-[11px] font-semibold tracking-wider uppercase text-[var(--brand)] mb-1">Filters</p>
+            <h2 className="text-lg font-semibold m-0 mb-1">今天想做什么</h2>
+            <p className="text-sm text-[var(--text-secondary)] mb-4">先筛分类，再在中间列表里挑菜。</p>
+            <div className="relative mb-4">
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
+              <Input className="pl-10 h-10 rounded-xl" placeholder="搜索菜品" value={search} onChange={(event) => setSearch(event.target.value)} />
+            </div>
+            <div className="flex flex-col gap-2">
               {categories.map((category) => (
                 <button
                   type="button"
                   key={category}
-                  className={`desktop-filter-item ${activeCategory === category ? 'is-active' : ''}`}
+                  className={cn(
+                    'w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-colors',
+                    activeCategory === category
+                      ? 'bg-[var(--brand-soft)] text-[var(--brand)]'
+                      : 'bg-[var(--surface-secondary)] text-[var(--text-secondary)] hover:bg-[var(--surface-button)]',
+                  )}
                   onClick={() => setActiveCategory(category)}
                 >
                   {category}
@@ -125,173 +142,217 @@ export function OrderPage() {
             </div>
           </aside>
 
-          <section className="desktop-order-main">
-            <div className="section-title"><h2>菜品列表</h2><span className="muted">共 {recipes.length} 道</span></div>
-            <div className="list-stack desktop-order-list">
+          {/* Recipe list */}
+          <section className="min-w-0">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="m-0 text-lg font-semibold">菜品列表</h2>
+              <span className="text-sm text-[var(--text-secondary)]">共 {recipes.length} 道</span>
+            </div>
+            <div className="flex flex-col gap-3 max-h-[calc(100vh-220px)] overflow-auto pr-1">
               {recipes.length ? (
                 recipes.map((recipe, index) => {
                   const selected = selectedCounts.get(recipe.id);
                   return (
                     <StaggerItem key={recipe.id} index={index} disabled={!enableListAnimations}>
-                        <RecipeListItem
-                          recipe={recipe}
-                          quantity={selected}
-                          onAdd={handleAddRecipe}
-                          onDecrease={handleDecrease}
-                        />
+                      <RecipeListItem
+                        recipe={recipe}
+                        quantity={selected}
+                        onAdd={handleAddRecipe}
+                        onDecrease={handleDecrease}
+                      />
                     </StaggerItem>
                   );
                 })
               ) : (
                 <EmptyState
                   icon={search ? '🔎' : '🥬'}
-                  accent="calm"
                   title={search ? '没有找到匹配菜品' : '这一类还没有菜'}
-                  description={search ? '换个关键词试试，或者先去新建一道拿手菜。' : '可以先切换分类，或者到菜谱页补充内容。'}
+                  description={search ? '换个关键词试试。' : '可以先切换分类，或到菜谱页补充内容。'}
                 />
               )}
             </div>
           </section>
 
-          <aside className={`desktop-panel desktop-order-cart ${barPulse ? 'is-pulsing' : ''}`}>
-            <div ref={cartTargetRef as React.RefObject<HTMLDivElement>} className="desktop-order-cart__header">
+          {/* Cart */}
+          <aside
+            className={cn(
+              'sticky top-0 p-5 rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)] transition-shadow',
+              barPulse && 'shadow-[var(--shadow-hover)]',
+            )}
+          >
+            <div ref={cartTargetRef as React.RefObject<HTMLDivElement>} className="flex items-start justify-between gap-3 mb-4">
               <div>
-                <p className="eyebrow">Cart</p>
-                <h2>已选菜品</h2>
+                <p className="text-[11px] font-semibold tracking-wider uppercase text-[var(--brand)] mb-1">Cart</p>
+                <h2 className="text-lg font-semibold m-0">已选菜品</h2>
               </div>
-              <span className="desktop-order-cart__count">{items.length}</span>
+              <Badge className="bg-[var(--brand-soft)] text-[var(--brand)] border-0 text-base font-bold min-w-[40px] h-10 rounded-xl grid place-items-center">
+                {items.length}
+              </Badge>
             </div>
-            <div className="cart-list desktop-order-cart__list">
+            <div className="flex flex-col gap-2.5 max-h-[calc(100vh-330px)] overflow-auto mb-4">
               {items.length ? (
                 items.map((item) => (
-                  <div key={item.recipe_name} className="cart-item cart-item--desktop">
-                    <div>
-                      <strong>{item.recipe_name}</strong>
-                      <p>{item.recipe_category}</p>
+                  <div key={item.recipe_name} className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-[var(--surface-secondary)]">
+                    <div className="min-w-0">
+                      <strong className="block text-sm font-medium truncate">{item.recipe_name}</strong>
+                      <p className="m-0 text-xs text-[var(--text-secondary)]">{item.recipe_category}</p>
                     </div>
-                    <div className="cart-item__actions">
-                      <button type="button" className="ghost-button small" onClick={() => item.recipe_id && handleDecrease(item.recipe_id)}>-</button>
-                      <span className="cart-item__count">{item.quantity}</span>
-                      <button
-                        type="button"
-                        className="ghost-button small"
+                    <div className="flex items-center gap-1.5">
+                      <Button variant="ghost" size="icon" className="w-7 h-7 rounded-full" onClick={() => item.recipe_id && handleDecrease(item.recipe_id)}>
+                        <Minus size={12} />
+                      </Button>
+                      <span className="min-w-[20px] text-center text-sm font-semibold">{item.quantity}</span>
+                      <Button
+                        variant="ghost" size="icon" className="w-7 h-7 rounded-full"
                         onClick={(event) => {
                           const recipe = recipes.find((entry) => entry.id === item.recipe_id);
                           if (recipe) handleAddRecipe(recipe, event.currentTarget);
                         }}
                       >
-                        +
-                      </button>
-                      <button type="button" className="ghost-button small" onClick={() => item.recipe_id && setPendingRemove({ id: item.recipe_id, name: item.recipe_name })}>移除</button>
+                        <Plus size={12} />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="w-7 h-7 rounded-full text-[#c13515]" onClick={() => item.recipe_id && setPendingRemove({ id: item.recipe_id, name: item.recipe_name })}>
+                        <X size={12} />
+                      </Button>
                     </div>
                   </div>
                 ))
               ) : (
-                <EmptyState icon="🧺" accent="warm" title="购物篮还是空的" description="从左边和中间挑几道菜，右侧会自动汇总。" />
+                <EmptyState icon="🧺" title="购物篮还是空的" description="从左边和中间挑几道菜。" />
               )}
             </div>
-            <button type="button" className="primary-button" onClick={createDraft} disabled={!items.length}>生成菜单</button>
+            <Button
+              className="w-full h-11 rounded-xl bg-[var(--brand)] hover:bg-[var(--brand-deep)] text-white font-semibold"
+              onClick={createDraft}
+              disabled={!items.length}
+            >
+              生成菜单
+            </Button>
           </aside>
         </div>
       ) : (
         <>
-          <input className="search-input" placeholder="搜索菜品" value={search} onChange={(event) => setSearch(event.target.value)} />
-          <div className="category-scroll">
-            {categories.map((category, index) => (
-              <StaggerItem key={category} index={index} disabled>
-                <button
-                  type="button"
-                  className={`category-chip ${activeCategory === category ? 'is-active' : ''}`}
-                  onClick={() => setActiveCategory(category)}
-                >
-                  {category}
-                </button>
-              </StaggerItem>
+          {/* Mobile search */}
+          <div className="relative mb-3">
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]" />
+            <Input className="pl-10 h-11 rounded-xl" placeholder="搜索菜品" value={search} onChange={(event) => setSearch(event.target.value)} />
+          </div>
+
+          {/* Mobile categories */}
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 mb-3">
+            {categories.map((category) => (
+              <button
+                type="button"
+                key={category}
+                className={cn(
+                  'flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium border transition-colors',
+                  activeCategory === category
+                    ? 'bg-[var(--brand)] text-white border-[var(--brand)]'
+                    : 'bg-white text-[var(--text-secondary)] border-[var(--border-color)]',
+                )}
+                onClick={() => setActiveCategory(category)}
+              >
+                {category}
+              </button>
             ))}
           </div>
-          <div className="list-stack with-bottom-bar">
+
+          {/* Mobile recipe list */}
+          <div className="flex flex-col gap-3 pb-[120px]">
             {recipes.length ? (
-              recipes.map((recipe, index) => {
+              recipes.map((recipe) => {
                 const selected = selectedCounts.get(recipe.id);
                 return (
-                  <StaggerItem key={recipe.id} index={index} disabled>
-                    <RecipeListItem
-                      recipe={recipe}
-                      quantity={selected}
-                      onAdd={handleAddRecipe}
-                      onDecrease={handleDecrease}
-                    />
-                  </StaggerItem>
+                  <RecipeListItem
+                    key={recipe.id}
+                    recipe={recipe}
+                    quantity={selected}
+                    onAdd={handleAddRecipe}
+                    onDecrease={handleDecrease}
+                  />
                 );
               })
             ) : (
               <EmptyState
                 icon={search ? '🔎' : '🥬'}
-                accent="calm"
                 title={search ? '没有找到匹配菜品' : '这一类还没有菜'}
-                description={search ? '换个关键词试试，或者先去新建一道拿手菜。' : '可以先切换分类，或者到菜谱页补充内容。'}
+                description={search ? '换个关键词试试。' : '可以先切换分类，或到菜谱页补充内容。'}
               />
             )}
           </div>
 
+          {/* Mobile selection bar */}
           <button
             ref={cartTargetRef as React.RefObject<HTMLButtonElement>}
             type="button"
-            className={`selection-bar ${items.length ? 'is-active' : ''} ${barPulse ? 'is-pulsing' : ''}`}
+            className={cn(
+              'selection-bar',
+              items.length && 'is-active',
+              barPulse && 'is-pulsing',
+            )}
             onClick={() => items.length && setSheetOpen(true)}
           >
             <div>
-              <strong>{items.length ? `已选 ${items.length} 道菜` : '还没有选择菜品'}</strong>
-              <div className="selection-bar__thumbs">
+              <strong className="block text-sm">{items.length ? `已选 ${items.length} 道菜` : '还没有选择菜品'}</strong>
+              <div className="flex gap-1.5 mt-2">
                 {items.length ? (
                   items.slice(0, 5).map((item) => (
-                    <span key={item.recipe_name} className="thumb-dot">{item.recipe_name.slice(0, 1)}</span>
+                    <span key={item.recipe_name} className="w-7 h-7 grid place-items-center rounded-full bg-[var(--brand-soft)] text-[var(--brand)] text-xs font-bold">
+                      {item.recipe_name.slice(0, 1)}
+                    </span>
                   ))
                 ) : (
-                  <span className="selection-bar__hint">先选几道菜，再生成菜单</span>
+                  <span className="text-xs text-[var(--text-secondary)]">先选几道菜，再生成菜单</span>
                 )}
               </div>
             </div>
-            <span className="selection-bar__arrow">⌃</span>
+            <ShoppingCart size={18} />
           </button>
 
+          {/* Mobile cart sheet */}
           <BottomSheet open={sheetOpen} onClose={() => setSheetOpen(false)} title="已选菜品">
-            <div className="cart-list">
+            <div className="flex flex-col gap-2.5 max-h-[42vh] overflow-y-auto">
               {items.length ? (
-                items.map((item, index) => (
-                  <StaggerItem key={item.recipe_name} index={index} disabled>
-                    <SwipeActionRow
-                      actionLabel="删除"
-                      onAction={() => item.recipe_id && setPendingRemove({ id: item.recipe_id, name: item.recipe_name })}
-                    >
-                      <div className="cart-item cart-item--swipe">
-                        <div>
-                          <strong>{item.recipe_name}</strong>
-                          <p>{item.recipe_category}</p>
-                        </div>
-                        <div className="cart-item__actions">
-                          <button type="button" className="ghost-button small" onClick={() => item.recipe_id && handleDecrease(item.recipe_id)}>-</button>
-                          <span className="cart-item__count">{item.quantity}</span>
-                          <button
-                            type="button"
-                            className="ghost-button small"
-                            onClick={(event) => {
-                              const recipe = recipes.find((entry) => entry.id === item.recipe_id);
-                              if (recipe) handleAddRecipe(recipe, event.currentTarget);
-                            }}
-                          >
-                            +
-                          </button>
-                        </div>
+                items.map((item) => (
+                  <SwipeActionRow
+                    key={item.recipe_name}
+                    actionLabel="删除"
+                    onAction={() => item.recipe_id && setPendingRemove({ id: item.recipe_id, name: item.recipe_name })}
+                  >
+                    <div className="flex items-center justify-between gap-3 p-3.5 rounded-[var(--radius-card)] bg-white">
+                      <div className="min-w-0">
+                        <strong className="block text-sm font-medium">{item.recipe_name}</strong>
+                        <p className="m-0 text-xs text-[var(--text-secondary)]">{item.recipe_category}</p>
                       </div>
-                    </SwipeActionRow>
-                  </StaggerItem>
+                      <div className="flex items-center gap-2">
+                        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full" onClick={() => item.recipe_id && handleDecrease(item.recipe_id)}>
+                          <Minus size={14} />
+                        </Button>
+                        <span className="min-w-[20px] text-center text-sm font-semibold">{item.quantity}</span>
+                        <Button
+                          variant="ghost" size="icon" className="w-8 h-8 rounded-full"
+                          onClick={(event) => {
+                            const recipe = recipes.find((entry) => entry.id === item.recipe_id);
+                            if (recipe) handleAddRecipe(recipe, event.currentTarget);
+                          }}
+                        >
+                          <Plus size={14} />
+                        </Button>
+                      </div>
+                    </div>
+                  </SwipeActionRow>
                 ))
               ) : (
-                <EmptyState icon="🧺" title="购物篮还是空的" description="挑几道喜欢的菜，底部会自动汇总到这里。" accent="warm" />
+                <EmptyState icon="🧺" title="购物篮还是空的" description="挑几道喜欢的菜。" />
               )}
             </div>
-            <button type="button" className="primary-button" onClick={createDraft} disabled={!items.length}>生成菜单</button>
+            <Button
+              className="w-full h-12 mt-4 rounded-xl bg-[var(--brand)] hover:bg-[var(--brand-deep)] text-white font-semibold"
+              onClick={createDraft}
+              disabled={!items.length}
+            >
+              生成菜单
+            </Button>
           </BottomSheet>
         </>
       )}
@@ -299,7 +360,7 @@ export function OrderPage() {
       <ActionSheet
         open={Boolean(pendingRemove)}
         title="从已选菜品里删除这道菜？"
-        description={pendingRemove ? `“${pendingRemove.name}” 将从当前购物篮中移除。` : ''}
+        description={pendingRemove ? `"${pendingRemove.name}" 将从当前购物篮中移除。` : ''}
         confirmLabel="确认删除"
         onConfirm={() => {
           if (pendingRemove) removeRecipe(pendingRemove.id);

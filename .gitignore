@@ -31,5 +31,14 @@ backend/uploads/recipes/*.webp
 # Claude Code
 .claude/
 
+# Artifacts & temp
+.artifacts/
+.playwright-cli/
+output/
+
+# Runtime uploads
+backend/uploads/family-members/
+backend/uploads/family-member-body-reports/
+
 # OS
 .DS_Store

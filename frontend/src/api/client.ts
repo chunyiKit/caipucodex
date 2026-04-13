@@ -14,6 +14,9 @@ async function parseResponse<T>(response: Response): Promise<T> {
     const data = await response.json().catch(() => ({ detail: '请求失败' }));
     throw new ApiError(data.detail ?? '请求失败', response.status);
   }
+  if (response.status === 204) {
+    return undefined as T;
+  }
   return response.json() as Promise<T>;
 }
 

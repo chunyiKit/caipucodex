@@ -1,4 +1,4 @@
-export type Category = '全部' | '荤菜' | '素菜' | '汤类' | '主食' | '凉菜' | '甜点';
+export type Category = string;
 
 export interface Ingredient {
   id?: number;
@@ -18,7 +18,7 @@ export interface CookingStep {
 export interface RecipeCard {
   id: number;
   name: string;
-  category: Exclude<Category, '全部'>;
+  category: string;
   description?: string | null;
   cooking_time?: number | null;
   difficulty: '简单' | '中等' | '困难';
@@ -34,9 +34,10 @@ export interface RecipeDetail extends RecipeCard {
 
 export interface RecipePayload {
   name: string;
-  category: Exclude<Category, '全部'>;
+  category: string;
   description?: string | null;
   cooking_time?: number | null;
+  kcal?: number | null;
   difficulty: '简单' | '中等' | '困难';
   image_url?: string | null;
   ingredients: Ingredient[];
@@ -47,7 +48,7 @@ export interface MenuItem {
   id?: number;
   recipe_id?: number | null;
   recipe_name: string;
-  recipe_category: Exclude<Category, '全部'>;
+  recipe_category: string;
   image_url?: string | null;
   cooking_time?: number | null;
   quantity: number;
@@ -88,7 +89,77 @@ export interface AIRecommendResponse {
   dishes: {
     recipe_id?: number | null;
     name: string;
-    category: Exclude<Category, '全部'>;
+    category: string;
     reason: string;
   }[];
+}
+
+export interface FamilyMemberBodyReport {
+  measured_at?: string | null;
+  source_device?: string | null;
+  source_image_url?: string | null;
+  body_type?: string | null;
+  score?: number | null;
+  advice?: string | null;
+  weight_jin?: number | null;
+  weight_delta_jin?: number | null;
+  bmi?: number | null;
+  bmi_delta?: number | null;
+  bmi_status?: string | null;
+  body_fat_pct?: number | null;
+  body_fat_delta?: number | null;
+  body_fat_status?: string | null;
+  water_mass_jin?: number | null;
+  fat_mass_jin?: number | null;
+  protein_mass_jin?: number | null;
+  bone_mass_jin?: number | null;
+  muscle_mass_jin?: number | null;
+  muscle_mass_status?: string | null;
+  muscle_rate_pct?: number | null;
+  muscle_rate_delta?: number | null;
+  muscle_rate_status?: string | null;
+  body_water_pct?: number | null;
+  body_water_delta?: number | null;
+  body_water_status?: string | null;
+  protein_pct?: number | null;
+  protein_delta?: number | null;
+  protein_status?: string | null;
+  salt_pct?: number | null;
+  salt_delta?: number | null;
+  salt_status?: string | null;
+  visceral_fat_level?: number | null;
+  visceral_fat_delta?: number | null;
+  visceral_fat_status?: string | null;
+  bmr_kcal?: number | null;
+  bmr_delta?: number | null;
+  bmr_status?: string | null;
+  waist_hip_ratio?: number | null;
+  waist_hip_status?: string | null;
+  metabolic_age_years?: number | null;
+  fat_free_mass_jin?: number | null;
+  fat_free_mass_delta?: number | null;
+  standard_weight_jin?: number | null;
+  weight_control_jin?: number | null;
+  fat_control_jin?: number | null;
+  muscle_control?: string | null;
+  [key: string]: string | number | null | undefined;
+}
+
+export interface FamilyMember {
+  id: number;
+  name: string;
+  height_cm?: number | null;
+  avatar_url?: string | null;
+  signature?: string | null;
+  body_report?: FamilyMemberBodyReport | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FamilyMemberPayload {
+  name: string;
+  height_cm?: number | null;
+  avatar_url?: string | null;
+  signature?: string | null;
+  body_report?: FamilyMemberBodyReport | null;
 }

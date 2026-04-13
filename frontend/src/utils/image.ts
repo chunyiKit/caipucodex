@@ -12,3 +12,7 @@ export async function compressImage(file: File): Promise<File> {
   if (!blob) return file;
   return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
 }
+
+export async function prepareBodyReportImage(file: File): Promise<File> {
+  return compressImage(file);
+}

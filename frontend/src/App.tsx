@@ -13,6 +13,8 @@ import { MenuDetailPage } from './pages/MenuDetailPage';
 import { IngredientsPage } from './pages/IngredientsPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { LoadingPage } from './pages/LoadingPage';
+import { RecipeDedupPage } from './pages/RecipeDedupPage';
+import { RecipeImportPage } from './pages/RecipeImportPage';
 
 const pageMotion = {
   initial: { opacity: 0, y: 16 },
@@ -34,6 +36,8 @@ function AnimatedRoutes() {
       <Route path="/recipes/new" element={<RecipeEditPage />} />
       <Route path="/recipes/:id" element={<RecipeDetailPage />} />
       <Route path="/recipes/:id/edit" element={<RecipeEditPage />} />
+      <Route path="/recipes/import" element={<RecipeImportPage />} />
+      <Route path="/recipes/dedup" element={<RecipeDedupPage />} />
       <Route path="/history" element={<HistoryPage />} />
       <Route path="/menus/preview" element={<MenuPreviewPage />} />
       <Route path="/menus/:id" element={<MenuDetailPage />} />

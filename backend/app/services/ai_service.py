@@ -1,16 +1,25 @@
 from __future__ import annotations
 
+import base64
 import json
+import secrets
+import time
 from collections import Counter
 
+import httpx
 from openai import OpenAI
 from pydantic import ValidationError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.config import get_settings
+from app.config import UPLOAD_DIR, get_settings
 from app.models import Recipe
-from app.schemas.ai import AIRecommendRequest, AIRecommendResponse
+from app.schemas.ai import (
+    AIRecommendRequest,
+    AIRecommendResponse,
+    GenerateCoverRequest,
+    GenerateCoverResponse,
+)
 
 
 class AIServiceError(RuntimeError):
@@ -65,6 +74,64 @@ class AIService:
         if not any(dish.category == "汤类" for dish in result.dishes):
             raise AIServiceError("AI response missing soup dish")
         return result
+
+    def generate_cover(self, payload: GenerateCoverRequest) -> GenerateCoverResponse:
+        if not self.settings.ark_api_key:
+            raise AIServiceError("Image generation service is not configured (ARK_API_KEY)")
+
+        prompt = self._build_cover_prompt(payload.name, payload.ingredients)
+
+        try:
+            response = httpx.post(
+                f"{self.settings.ark_base_url}/images/generations",
+                headers={
+                    "Authorization": f"Bearer {self.settings.ark_api_key}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": self.settings.ark_image_model,
+                    "prompt": prompt,
+                    "n": 1,
+                    "size": "2048x2048",
+                    "response_format": "b64_json",
+                },
+                timeout=60.0,
+            )
+            response.raise_for_status()
+        except httpx.HTTPError as exc:
+            raise AIServiceError("Image generation request failed") from exc
+
+        data = response.json()
+        items = data.get("data", [])
+        if not items:
+            raise AIServiceError("AI returned empty image data")
+
+        image_b64 = items[0].get("b64_json", "")
+        if image_b64:
+            image_bytes = base64.b64decode(image_b64)
+        else:
+            image_url = items[0].get("url", "")
+            if not image_url:
+                raise AIServiceError("AI returned empty image data")
+            img_resp = httpx.get(image_url, timeout=30.0)
+            img_resp.raise_for_status()
+            image_bytes = img_resp.content
+
+        filename = f"{int(time.time())}_{secrets.token_hex(4)}.png"
+        filepath = UPLOAD_DIR / filename
+        filepath.write_bytes(image_bytes)
+
+        return GenerateCoverResponse(url=f"/uploads/recipes/{filename}")
+
+    def _build_cover_prompt(self, name: str, ingredients: list[str]) -> str:
+        ingredient_text = "、".join(ingredients) if ingredients else "各种新鲜食材"
+        return (
+            f"漫画动画风格菜谱菜品图，Q版卡通化呈现。\n"
+            f"菜品名称：{name}\n"
+            f"主要食材：{ingredient_text}\n"
+            f"要求：色彩鲜艳饱满，食物造型萌趣可爱，干净简洁的浅色背景，"
+            f"俯视角度拍摄风格，适合作为手机菜谱应用的封面图，高清精致"
+        )
 
     def _suggested_category_mix(self) -> dict[str, int]:
         return {"荤菜": 1, "素菜": 2, "汤类": 1, "主食": 1}

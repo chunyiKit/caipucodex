@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { recommendMenu } from '@/api/ai';
 import { Screen } from '@/components/Screen';
 import { useToast } from '@/components/ToastProvider';
@@ -50,10 +51,18 @@ export function LoadingPage() {
   }, []);
 
   return (
-    <Screen className="loading-screen">
-      <div className="loading-pot">🍳</div>
-      <h1>AI 正在为您搭配菜单...</h1>
-      <p>{mutation.isPending ? '好的搭配让每一餐都有期待。' : '准备跳转到菜单预览...'}</p>
+    <Screen className="flex items-center justify-center min-h-[70vh]">
+      <div className="text-center">
+        <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[var(--brand-soft)] grid place-items-center">
+          <Loader2 size={36} className="text-[var(--brand)] animate-spin-slow" />
+        </div>
+        <h1 className="m-0 text-2xl font-bold tracking-[-0.44px] mb-2">
+          AI 正在为您搭配菜单...
+        </h1>
+        <p className="text-[var(--text-secondary)] m-0">
+          {mutation.isPending ? '好的搭配让每一餐都有期待。' : '准备跳转到菜单预览...'}
+        </p>
+      </div>
     </Screen>
   );
 }
