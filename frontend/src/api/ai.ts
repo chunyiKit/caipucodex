@@ -1,7 +1,7 @@
 import type { AIRecommendResponse } from '@/types';
 import { apiSend } from './client';
 
-export function recommendMenu(payload: { preferences: string[] }) {
+export function recommendMenu(payload: { preferences: string[]; diners: number }) {
   return apiSend<AIRecommendResponse>('/api/ai/recommend', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

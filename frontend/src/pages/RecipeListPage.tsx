@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Plus, Search } from 'lucide-react';
 import { getCategories } from '@/api/categories';
 import { getRecipes } from '@/api/recipes';
 import { EmptyState } from '@/components/EmptyState';
 import { RecipeCard } from '@/components/RecipeCard';
+import { RecipeGridSkeleton } from '@/components/Skeletons';
 import { Screen } from '@/components/Screen';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,14 +14,89 @@ import { defaultCategories } from '@/constants/categories';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { cn } from '@/lib/utils';
 
+const PAGE_SIZE = 20;
+
 export function RecipeListPage() {
   const { isDesktop } = useBreakpoint();
-  const [keyword, setKeyword] = useState('');
-  const [activeCategory, setActiveCategory] = useState('全部');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const keyword = searchParams.get('q') ?? '';
+  const activeCategory = searchParams.get('category') ?? '全部';
+
+  const setKeyword = useCallback(
+    (value: string) => {
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        if (value) {
+          next.set('q', value);
+        } else {
+          next.delete('q');
+        }
+        return next;
+      }, { replace: true });
+    },
+    [setSearchParams],
+  );
+
+  const setActiveCategory = useCallback(
+    (value: string) => {
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        if (value && value !== '全部') {
+          next.set('category', value);
+        } else {
+          next.delete('category');
+        }
+        return next;
+      }, { replace: true });
+    },
+    [setSearchParams],
+  );
   const categoriesQuery = useQuery({ queryKey: ['categories'], queryFn: getCategories });
   const categories = useMemo(() => categoriesQuery.data ?? defaultCategories, [categoriesQuery.data]);
-  const query = useQuery({ queryKey: ['recipes', activeCategory, keyword], queryFn: () => getRecipes({ category: activeCategory, search: keyword }) });
-  const recipes = useMemo(() => query.data ?? [], [query.data]);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ['recipes', activeCategory, keyword],
+    queryFn: ({ pageParam = 0 }) =>
+      getRecipes({ category: activeCategory, search: keyword, skip: pageParam, limit: PAGE_SIZE }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      const loaded = allPages.reduce((sum, page) => sum + page.items.length, 0);
+      return loaded < lastPage.total ? loaded : undefined;
+    },
+  });
+
+  const recipes = useMemo(
+    () => data?.pages.flatMap((page) => page.items) ?? [],
+    [data],
+  );
+  const total = data?.pages[0]?.total ?? 0;
+
+  // Intersection observer for infinite scroll
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const handleIntersect = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      if (entries[0]?.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    [fetchNextPage, hasNextPage, isFetchingNextPage],
+  );
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(handleIntersect, { rootMargin: '200px' });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [handleIntersect]);
+
+  const skeletonCount = isDesktop ? 6 : 4;
 
   return (
     <Screen>
@@ -58,7 +134,7 @@ export function RecipeListPage() {
               <p className="text-[11px] font-semibold tracking-wider uppercase text-[var(--brand)] mb-1">Recipe Book</p>
               <h1 className="m-0 text-[26px] font-bold tracking-[-0.44px]">我的菜谱</h1>
               <p className="m-0 mt-1 text-sm text-[var(--text-secondary)]">
-                共 <span className="font-semibold text-[var(--text-primary)]">{recipes.length}</span> 道菜谱
+                共 <span className="font-semibold text-[var(--text-primary)]">{total}</span> 道菜谱
               </p>
             </div>
             {isDesktop ? (
@@ -101,12 +177,26 @@ export function RecipeListPage() {
           ) : null}
 
           {/* Recipe grid */}
-          {recipes.length ? (
+          {isLoading ? (
             <div className={isDesktop ? 'grid grid-cols-3 gap-4' : 'grid grid-cols-2 gap-3.5'}>
-              {recipes.map((recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe} />
+              {Array.from({ length: skeletonCount }, (_, i) => (
+                <RecipeGridSkeleton key={i} />
               ))}
             </div>
+          ) : recipes.length ? (
+            <>
+              <div className={isDesktop ? 'grid grid-cols-3 gap-4' : 'grid grid-cols-2 gap-3.5'}>
+                {recipes.map((recipe) => (
+                  <RecipeCard key={recipe.id} recipe={recipe} />
+                ))}
+                {isFetchingNextPage
+                  ? Array.from({ length: isDesktop ? 3 : 2 }, (_, i) => (
+                      <RecipeGridSkeleton key={`loading-${i}`} />
+                    ))
+                  : null}
+              </div>
+              <div ref={sentinelRef} className="h-1" />
+            </>
           ) : (
             <EmptyState
               icon="📔"

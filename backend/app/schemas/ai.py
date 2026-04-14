@@ -5,10 +5,11 @@ from app.constants import REAL_CATEGORIES
 
 class AIRecommendRequest(BaseModel):
     preferences: list[str] = Field(default_factory=list)
+    diners: int = Field(default=2, ge=1, le=20)
 
 
 class AIRecommendedDish(BaseModel):
-    recipe_id: int | None = None
+    recipe_id: int
     name: str = Field(min_length=1, max_length=100)
     category: str
     reason: str = Field(min_length=1, max_length=200)

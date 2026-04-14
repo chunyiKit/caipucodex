@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Response, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Menu, MenuItem
+from app.models import Menu, MenuItem, MenuIngredientPurchase
 from app.repositories.menus import get_menu, list_menus
 from app.schemas.menu import IngredientsResponse, MenuDetail, MenuSummary, MenuWrite
 from app.services.ingredients import build_ingredients_response
@@ -68,3 +69,28 @@ def get_menu_ingredients(menu_id: int, db: Session = Depends(get_db)) -> Ingredi
     if not result:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Menu not found")
     return result
+
+
+@router.post("/{menu_id}/ingredients/toggle-purchase")
+def toggle_ingredient_purchase(
+    menu_id: int,
+    ingredient_key: str = Body(embed=True),
+    db: Session = Depends(get_db),
+) -> dict:
+    menu = get_menu(db, menu_id)
+    if not menu:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Menu not found")
+
+    stmt = select(MenuIngredientPurchase).where(
+        MenuIngredientPurchase.menu_id == menu_id,
+        MenuIngredientPurchase.ingredient_key == ingredient_key,
+    )
+    existing = db.scalar(stmt)
+    if existing:
+        db.delete(existing)
+        db.commit()
+        return {"purchased": False}
+
+    db.add(MenuIngredientPurchase(menu_id=menu_id, ingredient_key=ingredient_key))
+    db.commit()
+    return {"purchased": True}

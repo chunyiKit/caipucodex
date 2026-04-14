@@ -52,3 +52,8 @@ class RecipeCard(ORMModel):
 class RecipeDetail(RecipeCard):
     ingredients: list[IngredientRead]
     cooking_steps: list[CookingStepRead]
+
+
+class RecipeListResponse(BaseModel):
+    items: list[RecipeCard]
+    total: int

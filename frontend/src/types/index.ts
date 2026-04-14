@@ -32,6 +32,11 @@ export interface RecipeDetail extends RecipeCard {
   cooking_steps: CookingStep[];
 }
 
+export interface RecipeListResponse {
+  items: RecipeCard[];
+  total: number;
+}
+
 export interface RecipePayload {
   name: string;
   category: string;
@@ -87,7 +92,7 @@ export interface IngredientsResponse {
 
 export interface AIRecommendResponse {
   dishes: {
-    recipe_id?: number | null;
+    recipe_id: number;
     name: string;
     category: string;
     reason: string;

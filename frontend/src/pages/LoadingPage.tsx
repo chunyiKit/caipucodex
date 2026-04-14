@@ -12,7 +12,7 @@ export function LoadingPage() {
   const location = useLocation();
   const { showToast } = useToast();
   const { setDraft } = useMenuDraftStore();
-  const state = (location.state as { preferences?: string[] } | null) ?? null;
+  const state = (location.state as { preferences?: string[]; diners?: number } | null) ?? null;
 
   const mutation = useMutation({
     mutationFn: recommendMenu,
@@ -46,7 +46,7 @@ export function LoadingPage() {
       navigate('/', { replace: true });
       return;
     }
-    mutation.mutate({ preferences: state.preferences ?? [] });
+    mutation.mutate({ preferences: state.preferences ?? [], diners: state.diners ?? 2 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -1,12 +1,14 @@
-import type { RecipeCard, RecipeDetail, RecipePayload } from '@/types';
+import type { RecipeDetail, RecipeListResponse, RecipePayload } from '@/types';
 import { apiGet, apiSend } from './client';
 
-export function getRecipes(params?: { category?: string; search?: string }) {
+export function getRecipes(params?: { category?: string; search?: string; skip?: number; limit?: number }) {
   const query = new URLSearchParams();
   if (params?.category) query.set('category', params.category);
   if (params?.search) query.set('search', params.search);
+  if (params?.skip != null) query.set('skip', String(params.skip));
+  if (params?.limit != null) query.set('limit', String(params.limit));
   const suffix = query.toString() ? `?${query.toString()}` : '';
-  return apiGet<RecipeCard[]>(`/api/recipes${suffix}`);
+  return apiGet<RecipeListResponse>(`/api/recipes${suffix}`);
 }
 
 export function getRecipe(id: string | number) {

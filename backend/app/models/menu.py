@@ -38,3 +38,12 @@ class MenuItem(Base):
     sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
     menu: Mapped[Menu] = relationship(back_populates="items")
+
+
+class MenuIngredientPurchase(Base):
+    __tablename__ = "menu_ingredient_purchases"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    menu_id: Mapped[int] = mapped_column(ForeignKey("menus.id", ondelete="CASCADE"), index=True)
+    ingredient_key: Mapped[str] = mapped_column(String(200), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=False), server_default=func.now(), nullable=False)

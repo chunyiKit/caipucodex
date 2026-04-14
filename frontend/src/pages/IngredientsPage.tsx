@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { Check, Copy } from 'lucide-react';
-import { getMenuIngredients } from '@/api/menus';
+import { getMenuIngredients, toggleIngredientPurchase } from '@/api/menus';
 import { EmptyState } from '@/components/EmptyState';
 import { Screen } from '@/components/Screen';
 import { TopBar } from '@/components/TopBar';
@@ -17,10 +17,49 @@ export function IngredientsPage() {
   const { id = '' } = useParams();
   const { showToast } = useToast();
   const { isDesktop } = useBreakpoint();
-  const query = useQuery({ queryKey: ['menu', id, 'ingredients'], queryFn: () => getMenuIngredients(id) });
-  const [purchased, setPurchased] = useState<Record<string, boolean>>({});
-  const totalPurchased = useMemo(() => Object.values(purchased).filter(Boolean).length, [purchased]);
+  const queryClient = useQueryClient();
+  const queryKey = ['menu', id, 'ingredients'];
+  const query = useQuery({ queryKey, queryFn: () => getMenuIngredients(id) });
   const groups = query.data?.groups ?? [];
+
+  const purchased = useMemo(() => {
+    const map: Record<string, boolean> = {};
+    for (const group of groups) {
+      for (const item of group.items) {
+        const key = `${group.category}-${item.name}`;
+        if (item.purchased) map[key] = true;
+      }
+    }
+    return map;
+  }, [groups]);
+
+  const totalPurchased = useMemo(() => Object.values(purchased).filter(Boolean).length, [purchased]);
+
+  const toggleMutation = useMutation({
+    mutationFn: (ingredientKey: string) => toggleIngredientPurchase(id, ingredientKey),
+    onMutate: async (ingredientKey) => {
+      await queryClient.cancelQueries({ queryKey });
+      const previous = queryClient.getQueryData(queryKey);
+      queryClient.setQueryData(queryKey, (old: typeof query.data) => {
+        if (!old) return old;
+        return {
+          ...old,
+          groups: old.groups.map((group) => ({
+            ...group,
+            items: group.items.map((item) => {
+              const key = `${group.category}-${item.name}`;
+              return key === ingredientKey ? { ...item, purchased: !item.purchased } : item;
+            }),
+          })),
+        };
+      });
+      return { previous };
+    },
+    onError: (_err, _key, context) => {
+      if (context?.previous) queryClient.setQueryData(queryKey, context.previous);
+      showToast('操作失败，请重试', 'error');
+    },
+  });
 
   if (!groups.length) {
     return (
@@ -45,20 +84,22 @@ export function IngredientsPage() {
                   const key = `${group.category}-${item.name}`;
                   const isPurchased = purchased[key];
                   return (
-                    <button
-                      type="button"
+                    <div
+                      role="button"
+                      tabIndex={0}
                       className={cn(
-                        'flex items-center gap-3 py-3 text-left transition-colors',
+                        'flex items-center gap-3 py-3 text-left transition-colors cursor-pointer',
                         index < group.items.length - 1 && 'border-b border-[var(--border-color)]',
                         isPurchased && 'opacity-50',
                       )}
                       key={key}
-                      onClick={() => setPurchased((current) => ({ ...current, [key]: !current[key] }))}
+                      onClick={() => toggleMutation.mutate(key)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleMutation.mutate(key); }}
                     >
-                      <Checkbox checked={isPurchased} className="rounded-md" />
+                      <Checkbox checked={isPurchased} className="rounded-md" tabIndex={-1} />
                       <span className={cn('flex-1 text-sm', isPurchased && 'line-through')}>{item.name}</span>
                       <strong className={cn('text-sm text-[var(--text-secondary)]', isPurchased && 'line-through')}>{item.amount || '-'}</strong>
-                    </button>
+                    </div>
                   );
                 })}
               </div>

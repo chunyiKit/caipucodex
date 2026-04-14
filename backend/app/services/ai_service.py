@@ -34,7 +34,7 @@ class AIService:
         if not self.settings.openai_api_key:
             raise AIServiceError("AI service is not configured")
 
-        recipes = list(db.scalars(select(Recipe).order_by(Recipe.created_at.desc()).limit(50)).all())
+        recipes = list(db.scalars(select(Recipe).order_by(Recipe.created_at.desc()).limit(200)).all())
         recipe_catalog = [
             {
                 "id": recipe.id,
@@ -45,8 +45,9 @@ class AIService:
             }
             for recipe in recipes
         ]
-        category_counts = self._suggested_category_mix()
-        prompt = self._build_prompt(payload.preferences, category_counts, recipe_catalog)
+        valid_ids = {recipe.id for recipe in recipes}
+        category_counts = self._suggested_category_mix(payload.diners)
+        prompt = self._build_prompt(payload.preferences, payload.diners, category_counts, recipe_catalog)
         client = OpenAI(
             api_key=self.settings.openai_api_key,
             base_url=self.settings.openai_base_url,
@@ -73,6 +74,12 @@ class AIService:
 
         if not any(dish.category == "汤类" for dish in result.dishes):
             raise AIServiceError("AI response missing soup dish")
+
+        # Validate all recipe_ids exist in the database
+        invalid_ids = {dish.recipe_id for dish in result.dishes} - valid_ids
+        if invalid_ids:
+            raise AIServiceError(f"AI returned invalid recipe IDs: {invalid_ids}")
+
         return result
 
     def generate_cover(self, payload: GenerateCoverRequest) -> GenerateCoverResponse:
@@ -128,26 +135,43 @@ class AIService:
         return (
             f"漫画动画风格菜谱菜品图，Q版卡通化呈现。\n"
             f"菜品名称：{name}\n"
-            f"主要食材：{ingredient_text}\n"
-            f"要求：色彩鲜艳饱满，食物造型萌趣可爱，干净简洁的浅色背景，"
+            f"参考食材（仅用于理解菜品外观）：{ingredient_text}\n"
+            f"要求：只画这道菜的成品主菜，不要出现调料（酱油、盐、醋等）和配菜，"
+            f"色彩鲜艳饱满，食物造型萌趣可爱，干净简洁的浅色背景，"
             f"俯视角度拍摄风格，适合作为手机菜谱应用的封面图，高清精致"
         )
 
-    def _suggested_category_mix(self) -> dict[str, int]:
-        return {"荤菜": 1, "素菜": 2, "汤类": 1, "主食": 1}
+    def _suggested_category_mix(self, diners: int) -> dict[str, int]:
+        if diners <= 2:
+            return {"荤菜": 1, "素菜": 1, "汤类": 1, "主食": 1}
+        if diners <= 4:
+            return {"荤菜": 2, "素菜": 2, "汤类": 1, "主食": 1}
+        if diners <= 6:
+            return {"荤菜": 2, "素菜": 2, "汤类": 1, "主食": 1, "凉菜": 1}
+        # 7+
+        return {"荤菜": 3, "素菜": 3, "汤类": 1, "主食": 2, "凉菜": 1}
 
     def _build_prompt(
         self,
         preferences: list[str],
+        diners: int,
         category_counts: dict[str, int],
         recipe_catalog: list[dict],
     ) -> str:
+        total_dishes = sum(category_counts.values())
+        valid_ids = [r["id"] for r in recipe_catalog]
         return (
-            "你是家庭聚餐配菜助手。请严格返回 JSON，不要输出额外说明。\n"
+            "你是家庭聚餐配菜助手。请严格返回 JSON，不要输出任何额外说明文字。\n\n"
+            f"用餐人数: {diners} 人\n"
             f"偏好: {', '.join(preferences) if preferences else '无'}\n"
-            f"建议分类数量: {json.dumps(category_counts, ensure_ascii=False)}\n"
-            "要求: 必须至少包含一个汤类；尽量荤素均衡；优先使用提供的数据库菜谱；"
-            "若数据库中没有合适菜，recipe_id 设为 null。\n"
-            "返回格式: {\"dishes\": [{\"recipe_id\": number|null, \"name\": string, \"category\": string, \"reason\": string}]}\n"
-            f"数据库菜谱: {json.dumps(recipe_catalog, ensure_ascii=False)}"
+            f"建议分类及数量: {json.dumps(category_counts, ensure_ascii=False)}（共 {total_dishes} 道菜）\n\n"
+            "【严格要求】\n"
+            f"1. 你只能从下方「可选菜品列表」中选择菜品，recipe_id 必须是列表中存在的 id，"
+            f"合法 id 范围: {valid_ids}。禁止编造不存在的 id，禁止返回 null。\n"
+            "2. 必须至少包含一道汤类。\n"
+            "3. 尽量荤素均衡，根据用餐人数合理搭配分量。\n"
+            "4. name 和 category 必须与列表中对应 id 的菜品完全一致。\n\n"
+            "返回格式（纯 JSON，无 markdown）:\n"
+            '{\"dishes\": [{\"recipe_id\": number, \"name\": string, \"category\": string, \"reason\": string}]}\n\n'
+            f"可选菜品列表:\n{json.dumps(recipe_catalog, ensure_ascii=False)}"
         )

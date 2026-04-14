@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session, selectinload
 from sqlalchemy import select
 
 from app.constants import INGREDIENT_GROUPS
-from app.models import Ingredient, Menu, MenuItem, Recipe
+from app.models import Ingredient, Menu, MenuItem, MenuIngredientPurchase, Recipe
 from app.schemas.menu import IngredientGroup, IngredientEntry, IngredientsResponse
 
 INGREDIENT_CATEGORY_RULES = {
@@ -77,10 +77,23 @@ def build_ingredients_response(db: Session, menu_id: int) -> IngredientsResponse
             existing_amount = grouped[category].get(ingredient.name)
             grouped[category][ingredient.name] = merge_amounts(existing_amount, ingredient.amount)
 
+    # Load purchased states
+    purchase_stmt = select(MenuIngredientPurchase.ingredient_key).where(
+        MenuIngredientPurchase.menu_id == menu_id
+    )
+    purchased_keys = set(db.scalars(purchase_stmt).all())
+
     groups = []
     total_count = 0
     for group_name in INGREDIENT_GROUPS:
-        items = [IngredientEntry(name=name, amount=amount) for name, amount in grouped[group_name].items()]
+        items = [
+            IngredientEntry(
+                name=name,
+                amount=amount,
+                purchased=f"{group_name}-{name}" in purchased_keys,
+            )
+            for name, amount in grouped[group_name].items()
+        ]
         if not items:
             continue
         items.sort(key=lambda item: item.name)

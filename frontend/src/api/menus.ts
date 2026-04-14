@@ -24,3 +24,11 @@ export async function deleteMenu(id: string | number) {
 export function getMenuIngredients(id: string | number) {
   return apiGet<IngredientsResponse>(`/api/menus/${id}/ingredients`);
 }
+
+export function toggleIngredientPurchase(menuId: string | number, ingredientKey: string) {
+  return apiSend<{ purchased: boolean }>(`/api/menus/${menuId}/ingredients/toggle-purchase`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ingredient_key: ingredientKey }),
+  });
+}

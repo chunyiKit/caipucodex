@@ -29,7 +29,7 @@ export function MenuPreviewPage() {
   const orderClear = useOrderStore((state) => state.clear);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [pendingRemove, setPendingRemove] = useState<string | null>(null);
-  const recipesQuery = useQuery({ queryKey: ['recipes', 'picker'], queryFn: () => getRecipes() });
+  const recipesQuery = useQuery({ queryKey: ['recipes', 'picker'], queryFn: () => getRecipes({ limit: 100 }) });
   const grouped = useMemo(() => groupMenuItems(draft?.items ?? []), [draft]);
   const saveMutation = useMutation({
     mutationFn: createMenu,
@@ -165,8 +165,8 @@ export function MenuPreviewPage() {
       {/* Picker sheet */}
       <BottomSheet open={pickerOpen} onClose={() => setPickerOpen(false)} title="添加已有菜谱">
         <div className="flex flex-col gap-3 max-h-[42vh] overflow-y-auto">
-          {(recipesQuery.data ?? []).length ? (
-            (recipesQuery.data ?? []).map((recipe) => (
+          {(recipesQuery.data?.items ?? []).length ? (
+            (recipesQuery.data?.items ?? []).map((recipe) => (
               <RecipeListItem key={recipe.id} recipe={recipe} onAdd={(selectedRecipe) => addRecipe(selectedRecipe)} />
             ))
           ) : (

@@ -52,9 +52,9 @@ export function OrderPage() {
   const categories = useMemo(() => categoriesQuery.data ?? defaultCategories, [categoriesQuery.data]);
   const query = useQuery({
     queryKey: ['recipes', 'order', activeCategory, search],
-    queryFn: () => getRecipes({ category: activeCategory, search }),
+    queryFn: () => getRecipes({ category: activeCategory, search, limit: 100 }),
   });
-  const recipes = useMemo(() => query.data ?? [], [query.data]);
+  const recipes = useMemo(() => query.data?.items ?? [], [query.data]);
   const selectedCounts = useMemo(() => new Map(items.map((item) => [item.recipe_id, item.quantity] as const)), [items]);
   const enableListAnimations = isDesktop && !prefersReducedMotion;
   const enableFlyAnimation = isDesktop && !prefersReducedMotion;

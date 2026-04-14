@@ -30,14 +30,14 @@ export function RecipeDedupPage() {
 
   const query = useQuery({
     queryKey: ['recipes'],
-    queryFn: () => getRecipes(),
+    queryFn: () => getRecipes({ limit: 100 }),
     enabled: scanned,
   });
 
   const duplicateGroups = useMemo<DuplicateGroup[]>(() => {
-    if (!query.data) return [];
+    if (!query.data?.items) return [];
     const grouped = new Map<string, RecipeCard[]>();
-    for (const recipe of query.data) {
+    for (const recipe of query.data.items) {
       const key = recipe.name.trim();
       const list = grouped.get(key) ?? [];
       grouped.set(key, [...list, recipe]);

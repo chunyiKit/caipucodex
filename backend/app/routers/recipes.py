@@ -11,19 +11,23 @@ from app.config import UPLOAD_DIR
 from app.constants import REAL_CATEGORIES
 from app.database import get_db
 from app.models import CookingStep, Ingredient, Recipe
-from app.repositories.recipes import get_recipe, list_recipes
-from app.schemas.recipe import RecipeCard, RecipeDetail, RecipeWrite
+from app.repositories.recipes import count_recipes, get_recipe, list_recipes
+from app.schemas.recipe import RecipeCard, RecipeDetail, RecipeListResponse, RecipeWrite
 
 router = APIRouter(prefix="/api/recipes", tags=["recipes"])
 
 
-@router.get("", response_model=list[RecipeCard])
+@router.get("", response_model=RecipeListResponse)
 def get_recipes(
     category: str | None = Query(default=None),
     search: str | None = Query(default=None),
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=20, ge=1, le=100),
     db: Session = Depends(get_db),
-) -> list[Recipe]:
-    return list_recipes(db, category=category, search=search)
+) -> dict:
+    items = list_recipes(db, category=category, search=search, skip=skip, limit=limit)
+    total = count_recipes(db, category=category, search=search)
+    return {"items": items, "total": total}
 
 
 @router.get("/{recipe_id}", response_model=RecipeDetail)

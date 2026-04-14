@@ -1,4 +1,4 @@
-from .menu import Menu, MenuItem
+from .menu import Menu, MenuItem, MenuIngredientPurchase
 from .recipe import CookingStep, Ingredient, Recipe
 
 __all__ = [
@@ -7,4 +7,5 @@ __all__ = [
     "CookingStep",
     "Menu",
     "MenuItem",
+    "MenuIngredientPurchase",
 ]

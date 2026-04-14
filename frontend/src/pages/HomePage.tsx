@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { UtensilsCrossed, Sparkles, ChevronRight } from 'lucide-react';
+import { UtensilsCrossed, Sparkles, ChevronRight, Minus, Plus, Users } from 'lucide-react';
 import { getMenus } from '@/api/menus';
 import { getRecipes } from '@/api/recipes';
 import { BottomSheet } from '@/components/BottomSheet';
@@ -10,7 +10,6 @@ import { RecipeCard } from '@/components/RecipeCard';
 import { SectionTitle } from '@/components/SectionTitle';
 import { Screen } from '@/components/Screen';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { preferenceOptions } from '@/constants/categories';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { formatDateLong } from '@/utils/format';
@@ -20,11 +19,12 @@ export function HomePage() {
   const { isDesktop } = useBreakpoint();
   const [open, setOpen] = useState(false);
   const [preferences, setPreferences] = useState<string[]>([]);
+  const [diners, setDiners] = useState(2);
   const recipesQuery = useQuery({ queryKey: ['recipes', 'home'], queryFn: () => getRecipes() });
   const menusQuery = useQuery({ queryKey: ['menus'], queryFn: getMenus });
 
   const popularRecipes = useMemo(() => {
-    const recipes = recipesQuery.data ?? [];
+    const recipes = recipesQuery.data?.items ?? [];
     return recipes.slice(0, isDesktop ? 8 : 6);
   }, [isDesktop, recipesQuery.data]);
 
@@ -117,6 +117,35 @@ export function HomePage() {
 
       {/* AI Sheet */}
       <BottomSheet open={open} onClose={() => setOpen(false)} title="AI 智能配菜">
+        {/* Diners */}
+        <div className="mb-5">
+          <label className="block text-sm font-semibold mb-3">用餐人数</label>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 rounded-full bg-[var(--surface-secondary)] p-1">
+              <button
+                type="button"
+                className="w-9 h-9 rounded-full grid place-items-center hover:bg-white transition-colors disabled:opacity-30"
+                disabled={diners <= 1}
+                onClick={() => setDiners((n) => Math.max(1, n - 1))}
+              >
+                <Minus size={16} />
+              </button>
+              <span className="min-w-[32px] text-center font-semibold tabular-nums">{diners}</span>
+              <button
+                type="button"
+                className="w-9 h-9 rounded-full grid place-items-center hover:bg-white transition-colors disabled:opacity-30"
+                disabled={diners >= 20}
+                onClick={() => setDiners((n) => Math.min(20, n + 1))}
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+            <span className="text-sm text-[var(--text-secondary)] flex items-center gap-1.5">
+              <Users size={14} /> {diners} 人用餐
+            </span>
+          </div>
+        </div>
+        {/* Preferences */}
         <div className="mb-5">
           <label className="block text-sm font-semibold mb-3">偏好</label>
           <div className="flex flex-wrap gap-2">
@@ -144,7 +173,7 @@ export function HomePage() {
           className="w-full h-12 rounded-xl text-base font-semibold bg-[var(--brand)] hover:bg-[var(--brand-deep)] text-white"
           onClick={() => {
             setOpen(false);
-            navigate('/ai/loading', { state: { preferences } });
+            navigate('/ai/loading', { state: { preferences, diners } });
           }}
         >
           开始推荐
